@@ -30,6 +30,10 @@ Route::get('register', function () {
     return view('auth.register');
 })->name('auth.register');
 
+Route::get('calendar', function () {
+    return view('calendar.index');
+})->name('calendar');
+
 Route::resource('tasks', TaskController::class);
 
 Route::resource('categories', CategoryController::class);

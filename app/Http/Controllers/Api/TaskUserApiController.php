@@ -56,4 +56,11 @@ class TaskUserApiController extends Controller
         return response()->json(['message' => 'User removed from task successfully'], 200);
     }
 
+    public function calendarTasks(User $user)
+    {
+        $tasks = $user->tasks()->get(['id', 'name as title', 'date_start as start', 'date_end as end']);
+        return response()->json($tasks, 200);
+    }
+
+
 }

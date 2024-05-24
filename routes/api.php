@@ -28,6 +28,8 @@ use App\Http\Controllers\Api\CategoryTaskController;
 
 
 // REVISAR RUTAS DE API AL FINALIZAR EL PROYECTO
+Route::get('/calendar/{user}/tasks', [TaskUserApiController::class, 'calendarTasks']);
+
 Route::get('/users/{user}/tasks', [TaskUserApiController::class, 'getTasksUser']);
 Route::get('/tasks/{task}/users', [TaskUserApiController::class, 'getUsersTask']);
 Route::post('/tasks/{task}/assign-user', [TaskUserApiController::class, 'assignUserToTask']);

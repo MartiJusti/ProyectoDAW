@@ -43,6 +43,11 @@
             Perfil</a>
     </button>
 
+    <button class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded">
+        <a href="{{ route('calendar') }}">
+            Calendario</a>
+    </button>
+
 @endsection
 
 @section('scripts')

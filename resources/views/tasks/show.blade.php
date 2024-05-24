@@ -7,6 +7,7 @@
         <div class="mb-4">
             <h1 class="text-2xl font-bold">Detalles de la Tarea</h1>
             <p>ID de la Tarea: {{ $task->id }}</p>
+            <p>Nombre de la Tarea: {{ $task->name }}</p>
         </div>
 
         <div class="flex space-x-4 mb-4">
