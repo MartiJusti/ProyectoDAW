@@ -3,7 +3,8 @@
 @section('title', 'Chat')
 
 @section('content')
-    <div id="chat-container" class="max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md h-96 overflow-y-scroll flex flex-col-reverse">
+    <div id="chat-container"
+        class="max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md h-96 overflow-y-scroll flex flex-col-reverse">
     </div>
     <div class="max-w-2xl mx-auto p-4 bg-white rounded-lg shadow-md mt-4">
         <form id="message-form" class="flex">
@@ -53,10 +54,12 @@
                     messageElement.classList.add('mb-4', 'p-3', 'rounded', 'max-w-sm');
                     if (message.sender_id === authUser.id) {
                         messageElement.classList.add('bg-green-100', 'self-end', 'text-right');
-                        messageElement.innerText = `${authUser.username}: ${message.content}`;
+                        messageElement.innerHTML =
+                            `<span class="font-bold">${authUser.username}</span>: ${message.content}`;
                     } else {
                         messageElement.classList.add('bg-red-100', 'self-start', 'text-left');
-                        messageElement.innerText = `${otherUser.name}: ${message.content}`;
+                        messageElement.innerHTML =
+                            `<span class="font-bold">${otherUser.username}</span>: ${message.content}`;
                     }
                     chatContainer.appendChild(messageElement);
                 });

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 class UserApiController extends Controller
 {
@@ -36,9 +37,20 @@ class UserApiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if ($request->has('username')) {
+            $user->username = $request->input('username');
+        }
+        if ($request->has('password')) {
+            $user->password = $request->input('password');
+        }
+
+        $user->save();
+
+        return response()->json($user, 201);
     }
 
     /**
