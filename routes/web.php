@@ -34,6 +34,13 @@ Route::get('calendar', function () {
     return view('calendar.index');
 })->name('calendar');
 
+Route::get('account', function () {
+    return view('users.account');
+})->name('users.account');
+
+Route::get('/chat/{user}', [MessageController::class, 'showChatWithUser'])->name('chat');
+
+
 Route::resource('tasks', TaskController::class);
 
 Route::resource('categories', CategoryController::class);
@@ -44,6 +51,4 @@ Route::resource('scores', ScoreController::class);
 
 Route::resource('users', UserController::class);
 
-Route::get('/account', function () {
-    return view('users.account');
-})->name('users.account');
+

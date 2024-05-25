@@ -83,6 +83,7 @@
                     })
                     .then(data => {
                         localStorage.removeItem('accessToken');
+                        localStorage.removeItem('user');
                         window.location.href = "{{ route('auth.login') }}";
                     })
                     .catch(error => {

@@ -50,7 +50,7 @@ Route::post('/login', [AuthApiController::class, 'login']);
 
 Route::apiResource('categoriesAPI', CategoryApiController::class);
 
-Route::apiResource('messagesAPI', MessageApiController::class);
+
 
 Route::apiResource('scoresAPI', ScoreApiController::class);
 
@@ -64,8 +64,13 @@ Route::group([
         return $request->user();
     });
 
-    Route::apiResource('tasksAPI', TaskApiController::class);
+    Route::get('/messages/with/{user}', [MessageApiController::class, 'getMessagesWithUser']);
 
     Route::post('logout', [AuthApiController::class, 'logout']);
+
+    Route::apiResource('tasksAPI', TaskApiController::class);
+
+    Route::apiResource('messagesAPI', MessageApiController::class);
+
 });
 

@@ -30,7 +30,7 @@
                 <div class="flex items-center justify-between">
 
                     <div class="text-sm">
-                        <a href="{{route('auth.register')}}" class="font-medium text-indigo-600 hover:text-indigo-500">
+                        <a href="{{ route('auth.register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
                             ¿No tienes cuenta?
                         </a>
                     </div>
@@ -83,6 +83,10 @@
                         const accessToken = data['access-token'];
                         console.log('Token de acceso:', accessToken);
 
+                        const userInfo = data['user'];
+                        console.log('Información del usuario:', userInfo);
+
+                        localStorage.setItem('userInfo', JSON.stringify(userInfo));
                         localStorage.setItem('accessToken', accessToken);
                         window.location.href = '/';
                     })
