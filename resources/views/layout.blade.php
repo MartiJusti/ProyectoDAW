@@ -14,10 +14,13 @@
 
 <body>
 
+    <div class="flex min-h-screen">
+        <div class="flex-1 p-10">
+            @yield('content')
+        </div>
 
-    <div>@yield('content')</div>
-
-    <br>
+        @include('partials.sidebar')
+    </div>
 
     @yield('scripts')
 </body>

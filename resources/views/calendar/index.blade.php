@@ -5,7 +5,6 @@
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
     <style>
-        /* Agrega estilos personalizados aquí para FullCalendar */
         .fc-toolbar {
             display: flex;
             justify-content: space-between;
@@ -16,11 +15,11 @@
         .fc-toolbar h2 {
             font-size: 1.5rem;
             font-weight: 700;
-            color: #4A5568; /* Color de texto personalizado */
+            color: #4A5568;
         }
 
         .fc-button {
-            background-color: #4299E1; /* Color de fondo personalizado */
+            background-color: #4299E1;
             border-color: #4299E1;
             color: #fff;
             padding: 0.5rem 1rem;
@@ -30,18 +29,18 @@
         }
 
         .fc-button:hover {
-            background-color: #3182CE; /* Color de fondo al pasar el cursor */
+            background-color: #3182CE;
             border-color: #3182CE;
         }
 
         .fc-daygrid-day-number {
             font-size: 0.875rem;
             font-weight: 700;
-            color: #2D3748; /* Color de texto de los números de día */
+            color: #2D3748;
         }
 
         .fc-event {
-            background-color: #48BB78; /* Color de fondo personalizado de los eventos */
+            background-color: #48BB78;
             border: none;
             padding: 0.5rem;
             border-radius: 0.25rem;
@@ -51,7 +50,7 @@
         }
 
         .fc-event:hover {
-            background-color: #38A169; /* Color de fondo al pasar el cursor sobre los eventos */
+            background-color: #38A169;
         }
     </style>
 @endsection

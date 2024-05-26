@@ -18,9 +18,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('index');
-})->name('index');
+/* Route::get('/', function () {
+    if (auth()->check()) {
+        return redirect()->route('tasks.index');
+    }
+    return redirect()->route('auth.login');
+})->name('home'); */
 
 Route::get('login', function () {
     return view('auth.login');
@@ -40,15 +43,14 @@ Route::get('account', function () {
 
 Route::get('/chat/{user}', [MessageController::class, 'showChatWithUser'])->name('chat');
 
-
 Route::resource('tasks', TaskController::class);
-
 Route::resource('categories', CategoryController::class);
-
 Route::resource('messages', MessageController::class);
-
 Route::resource('scores', ScoreController::class);
-
 Route::resource('users', UserController::class);
+
+Route::middleware('auth:sanctum')->group(function () {
+
+});
 
 
