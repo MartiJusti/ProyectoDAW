@@ -1,4 +1,3 @@
-
 <button id="sidebarToggle" class="fixed left-0 ml-4 mt-4 z-50 hover:bg-slate-200 hover:rounded-md">
     <svg id="hamburger-icon" class="w-8 h-8 text-gray-800" fill="none" stroke="currentColor" viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg">
@@ -37,92 +36,6 @@
     </nav>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginLink = document.getElementById('login-link');
-        const logoutLink = document.getElementById('logout-link');
-        const tasksLink = document.getElementById('tasks-link');
-        const taskCreateLink = document.getElementById('task-create-link');
-        const messagesLink = document.getElementById('messages-link');
-        const profileLink = document.getElementById('profile-link');
-        const calendarLink = document.getElementById('calendar-link');
-
-        const accessToken = localStorage.getItem('accessToken');
-        const apiUrl = 'http://127.0.0.1:8000/api/logout';
-
-        if (accessToken) {
-            if (loginLink) loginLink.classList.add('hidden');
-            if (logoutLink) logoutLink.classList.remove('hidden');
-        } else {
-            if (loginLink) loginLink.classList.remove('hidden');
-            if (logoutLink) logoutLink.classList.add('hidden');
-            if (tasksLink) tasksLink.classList.add('hidden');
-            if (taskCreateLink) taskCreateLink.classList.add('hidden');
-            if (messagesLink) messagesLink.classList.add('hidden');
-            if (profileLink) profileLink.classList.add('hidden');
-            if (calendarLink) calendarLink.classList.add('hidden');
-        }
-
-        if (logoutLink) {
-            logoutLink.addEventListener('click', function() {
-                fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        }
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error al cerrar sesión');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        localStorage.removeItem('accessToken');
-                        localStorage.removeItem('userInfo');
-                        window.location.href = "{{ route('auth.login') }}";
-                    })
-                    .catch(error => {
-                        console.error('Error al cerrar sesión:', error);
-                    });
-            });
-        }
-
-        const sidebar = document.getElementById('sidebar');
-        const sidebarToggle = document.getElementById('sidebarToggle');
-        const sidebarCloseToggle = document.getElementById('sidebarCloseToggle');
-        const overlay = document.getElementById('overlay');
-        const hamburgerIcon = document.getElementById('hamburger-icon');
-
-        const toggleSidebar = () => {
-            const isHidden = sidebar.classList.contains('hidden');
-            if (isHidden) {
-                sidebar.classList.remove('hidden');
-                sidebar.classList.remove('-translate-x-full');
-                sidebar.classList.add('translate-x-0');
-                overlay.classList.remove('hidden');
-            } else {
-                sidebar.classList.add('-translate-x-full');
-                sidebar.classList.remove('translate-x-0');
-                overlay.classList.add('hidden');
-
-                sidebar.addEventListener('transitionend', function handleTransitionEnd() {
-                    sidebar.classList.add('hidden');
-                    sidebar.removeEventListener('transitionend', handleTransitionEnd);
-                });
-            }
-        };
-
-        if (sidebarToggle) {
-            sidebarToggle.addEventListener('click', toggleSidebar);
-        }
-
-        if (sidebarCloseToggle) {
-            sidebarCloseToggle.addEventListener('click', toggleSidebar);
-        }
-
-        if (overlay) {
-            overlay.addEventListener('click', toggleSidebar);
-        }
-    });
-</script>
+{{-- Estas directrices vite no está dentro de @section('scripts') porque no utilizan el layout --}}
+@vite('resources/js/auth/logout.js')
+@vite('resources/js/misc/sidebar.js')

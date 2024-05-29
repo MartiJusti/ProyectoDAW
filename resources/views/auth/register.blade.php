@@ -5,7 +5,7 @@
 @section('body-class', 'public-view')
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
@@ -69,38 +69,5 @@
 @endsection
 
 @section('scripts')
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const registerForm = document.getElementById('register-form');
-
-            registerForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const apiUrl = 'http://127.0.0.1:8000/api/register';
-                const formData = new FormData(registerForm);
-
-                formData.forEach((value, key) => {
-                    console.log(`${key}: ${value}`);
-                });
-                fetch(apiUrl, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(
-                                'Usuario no autorizado. Por favor, verifique sus credenciales.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        window.location.href = '/login';
-                    })
-                    .catch(error => {
-                        console.error('Error al crear cuenta:', error.message);
-
-                    });
-            });
-        });
-    </script>
+    @vite('resources/js/auth/register.js')
 @endsection

@@ -5,7 +5,7 @@
 @section('body-class', 'public-view')
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
             <div></div>
             <div>
@@ -59,37 +59,5 @@
 @endsection
 
 @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const loginForm = document.getElementById('login-form');
-            const apiUrl = 'http://127.0.0.1:8000/api/login';
-
-            loginForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(loginForm);
-                fetch(apiUrl, {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(
-                                'Usuario no autorizado. Por favor, verifique sus credenciales.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const accessToken = data['access-token'];
-                        localStorage.setItem('accessToken', accessToken);
-                        localStorage.setItem('userInfo', JSON.stringify(data['user']));
-                        window.location.href = '/tasks';
-                    })
-                    .catch(error => {
-                        console.error('Error al iniciar sesión:', error.message);
-                        alert(error.message);
-                    });
-            });
-        });
-    </script>
+    @vite('resources/js/auth/login.js')
 @endsection
