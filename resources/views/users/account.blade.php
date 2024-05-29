@@ -3,7 +3,7 @@
 @section('title', 'Perfil de Usuario')
 
 @section('content')
-    <div class="container mx-auto py-8">
+    <div class="container mx-auto py-8 px-4">
         <div class="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden">
             <div class="p-6">
                 <h2 class="text-2xl font-semibold mb-4">Datos del Usuario</h2>
@@ -28,6 +28,7 @@
             </div>
         </div>
     </div>
+
 @endsection
 
 @section('scripts')
@@ -37,28 +38,11 @@
         const userEmail = document.getElementById("email");
         const userBirthday = document.getElementById("birthday");
 
-        const apiUrl = "http://127.0.0.1:8000/api/currentUser";
-        const accessToken = localStorage.getItem('accessToken');
+        const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-        fetch(apiUrl, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        }).then((response) => {
-            if (!response.ok) {
-                throw new Error('Error al obtener información del usuario');
-            }
-            return response.json();
-
-        })
-        .then(data => {
-            userName.textContent = data.name;
-            userUsername.textContent = data.username;
-            userEmail.textContent = data.email;
-            userBirthday.textContent = data.birthday;
-        })
-        .catch((err) => {
-            console.error(err);
-        });
+        userName.textContent = userInfo.name;
+        userUsername.textContent = userInfo.username;
+        userEmail.textContent = userInfo.email;
+        userBirthday.textContent = userInfo.birthday;
     </script>
 @endsection

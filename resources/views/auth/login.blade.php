@@ -2,19 +2,12 @@
 
 @section('title', 'Iniciar sesión')
 
+@section('body-class', 'public-view')
+
 @section('content')
     <div class="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md w-full space-y-8">
-            <div>
-                @php
-                    if (auth()->check()) {
-                        echo '<h2>Funciona</h2>';
-                    } else {
-                        echo '<h2>No Funciona</h2>';
-                    }
-
-                @endphp
-            </div>
+            <div></div>
             <div>
                 <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
                     Iniciar sesión
@@ -23,7 +16,7 @@
             <form id="login-form" class="mt-8 space-y-6">
                 @csrf
                 <div class="rounded-md shadow-sm -space-y-px">
-                    <div>
+                    <div class="mb-4">
                         <label for="email" class="sr-only">Correo electrónico</label>
                         <input id="email" name="email" type="email" autocomplete="email" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
@@ -38,7 +31,6 @@
                 </div>
 
                 <div class="flex items-center justify-between">
-
                     <div class="text-sm">
                         <a href="{{ route('auth.register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
                             ¿No tienes cuenta?
@@ -70,8 +62,6 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const loginForm = document.getElementById('login-form');
-            const loginBtn = document.getElementById('login-btn');
-
             const apiUrl = 'http://127.0.0.1:8000/api/login';
 
             loginForm.addEventListener('submit', function(e) {
@@ -91,14 +81,9 @@
                     })
                     .then(data => {
                         const accessToken = data['access-token'];
-                        console.log('Token de acceso:', accessToken);
-
-                        const userInfo = data['user'];
-                        console.log('Información del usuario:', userInfo);
-
-                        localStorage.setItem('userInfo', JSON.stringify(userInfo));
                         localStorage.setItem('accessToken', accessToken);
-                        window.location.href = '/';
+                        localStorage.setItem('userInfo', JSON.stringify(data['user']));
+                        window.location.href = '/tasks';
                     })
                     .catch(error => {
                         console.error('Error al iniciar sesión:', error.message);

@@ -3,7 +3,9 @@
 @section('title', 'Mensajes')
 
 @section('content')
-    <div id="users-list" class="p-4 bg-white rounded-lg shadow-lg"></div>
+    <div class="max-w-md mx-auto p-4 bg-white rounded-lg shadow-lg mt-10">
+        <div id="users-list"></div>
+    </div>
 @endsection
 
 @section('scripts')
@@ -28,17 +30,14 @@
                 .then(users => {
                     usersList.innerHTML = '';
 
-                    //PENSAR SI MOSTRAR NOMBRES DE USUARIO EN LUGAR DE NOMBRES DE PILA
                     users
                         .filter(user => user.id !== authUser.id)
                         .forEach(user => {
                             const userLink = document.createElement('a');
-                            userLink.classList.add('block', 'p-2', 'border-b',
-                                'border-gray-200',
+                            userLink.classList.add('block', 'p-4', 'border-b', 'border-gray-200',
                                 'cursor-pointer', 'hover:bg-gray-100');
                             userLink.textContent = user.name;
-                            userLink.href =
-                                `/chat/${user.id}`;
+                            userLink.href = `/chat/${user.id}`;
                             usersList.appendChild(userLink);
                         });
                 })

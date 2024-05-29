@@ -11,7 +11,7 @@
                 @method('PATCH')
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
-                    <input type="text" name="name" id="name"
+                    <input type="text" name="name" id="name" value="{{ $task->name }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required>
                     @error('name')
@@ -20,7 +20,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="description" class="block text-gray-700 text-sm font-bold mb-2">Descripción</label>
-                    <input type="text" name="description" id="description"
+                    <input type="text" name="description" id="description" value="{{ $task->description }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required>
                     @error('description')
@@ -29,7 +29,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="date-start" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Inicio</label>
-                    <input type="date" name="date_start" id="date-start"
+                    <input type="date" name="date_start" id="date-start" value="{{ $task->date_start }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required>
                     @error('date_start')
@@ -38,7 +38,7 @@
                 </div>
                 <div class="mb-4">
                     <label for="date-end" class="block text-gray-700 text-sm font-bold mb-2">Fecha de Fin</label>
-                    <input type="date" name="date_end" id="date-end"
+                    <input type="date" name="date_end" id="date-end" value="{{ $task->date_end }}"
                         class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         required>
                     @error('date_end')
@@ -91,6 +91,21 @@
                     })
                     .then(data => {
                         console.log(data);
+                        console.log(data.id);
+
+                        Toastify({
+                            text: "¡Tarea editada con éxito!",
+
+                            duration: 1500,
+                            gravity: "top",
+                            position: "right",
+                            style: {
+                                background: "linear-gradient(to right, #00b09b, #96c93d)",
+                            },
+
+                        }).showToast();
+
+                        window.location.href = `/tasks/${data.id}`;
                     })
                     .catch(error => {
                         console.error(error.message);

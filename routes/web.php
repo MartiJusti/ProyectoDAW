@@ -18,12 +18,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-/* Route::get('/', function () {
-    if (auth()->check()) {
-        return redirect()->route('tasks.index');
-    }
-    return redirect()->route('auth.login');
-})->name('home'); */
+Route::get('/', function () {
+
+    return view('tasks.index');
+});
+
 
 Route::get('login', function () {
     return view('auth.login');

@@ -75,10 +75,6 @@ class MessageApiController extends Controller
         })->orderBy('date_sent', 'asc')
             ->get();
 
-        if ($messages->isEmpty()) {
-            return response()->json(['error' => 'No se encontraron mensajes entre estos usuarios'], 404);
-        }
-
         return response()->json($messages, 200);
     }
 }

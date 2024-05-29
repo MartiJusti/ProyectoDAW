@@ -49,6 +49,13 @@
 
             function displayMessages(messages) {
                 chatContainer.innerHTML = '';
+                if (messages.length === 0) {
+                    const noMessagesElement = document.createElement('div');
+                    noMessagesElement.classList.add('text-center', 'text-gray-500', 'mt-4');
+                    noMessagesElement.textContent = 'No tienes ningún mensaje con este usuario.';
+                    chatContainer.appendChild(noMessagesElement);
+                    return;
+                }
                 messages.reverse().forEach(message => {
                     const messageElement = document.createElement('div');
                     messageElement.classList.add('mb-4', 'p-3', 'rounded', 'max-w-sm');
