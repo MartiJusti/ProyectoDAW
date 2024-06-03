@@ -1,37 +1,40 @@
-export function deleteTask(accessToken, taskId) {
-    const apiUrl = 'http://127.0.0.1:8000/api/tasksAPI/';
-
-    fetch(`${apiUrl}${taskId}`, {
+function deleteTask(apiUrl, taskId, accessToken) {
+    return fetch(`${apiUrl}/tasksAPI/${taskId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
             },
         })
         .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al borrar.');
+            if (response.status === 204) {
+                Toastify({
+                    text: "¡Tarea eliminada con éxito!",
+                    duration: 1000,
+                    gravity: "top",
+                    position: "right",
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                    },
+                    callback: function () {
+                        window.location.href = '/tasks';
+                    }
+                }).showToast();
+            } else {
+                return response.json().then(data => {
+                    throw new Error(data.error || 'Error al borrar.');
+                });
             }
-            return response.json();
-        })
-        .then(data => {
-            Toastify({
-                text: "¡Tarea eliminada con éxito!",
-
-                duration: 1500,
-                gravity: "top",
-                position: "right",
-                style: {
-                    background: "linear-gradient(to right, #f53527, #eed959)",
-                },
-                onClose: () => {
-                    window.location.href = '/tasks';
-                }
-
-            }).showToast();
-
-            window.location.href = '/tasks';
         })
         .catch(error => {
             console.error(error.message);
         });
 }
+
+window.initializeDeleteTask = function (apiUrl, taskId, accessToken) {
+    const deleteButton = document.getElementById('delete-task');
+    deleteButton.addEventListener('click', function () {
+        if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
+            deleteTask(apiUrl, taskId, accessToken);
+        }
+    });
+};

@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
+use Laravolt\Avatar\Facade as Avatar;
+use Illuminate\Support\Facades\Storage;
 
 class AuthApiController extends Controller
 {
@@ -27,6 +29,10 @@ class AuthApiController extends Controller
             'birthday' => $request->birthday,
             'rol' => $request->rol ?? 'participant'
         ]);
+
+        /* $avatar = Avatar::create($user->name)->getImageObject()->encode('png');
+        Storage::disk('public')->put('avatars/avatar-' . $user->id . '.png', (string) $avatar); */
+
 
         return response()->json($user);
     }

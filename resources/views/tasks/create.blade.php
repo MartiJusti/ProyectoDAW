@@ -56,38 +56,5 @@
 @endsection
 
 @section('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const taskForm = document.getElementById('task-form');
-            const accessToken = localStorage.getItem('accessToken');
-
-            const apiUrl = 'http://127.0.0.1:8000/api/tasksAPI';
-
-            taskForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(taskForm);
-                fetch(apiUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`
-                        },
-                        body: formData
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error(
-                                'Datos de tarea incorrectos.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(error => {
-                        console.error(error.message);
-                    });
-            });
-        });
-    </script>
+    @vite('resources/js/tasks/create.js')
 @endsection

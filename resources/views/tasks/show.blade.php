@@ -50,15 +50,25 @@
                 class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-2 rounded">Asignar Categoría</button>
         </div>
 
+        <div id="user-scores" class="mb-4 p-4 bg-gray-200 rounded shadow-md">
+            <h2 class="text-xl font-bold mb-2">Puntuaciones de los Usuarios</h2>
+        </div>
+
     </div>
 @endsection
 
 @section('scripts')
+    @vite('resources/js/tasks/users.js')
+    @vite('resources/js/tasks/destroy.js')
+    @vite('resources/js/categories/main.js')
+    @vite('resources/js/scores/main.js')
+    {{-- @vite('resources/js/categories/index.js')
+    @vite('resources/js/categories/getFromTask.js')
+    @vite('resources/js/categories/assignToTask.js') --}}
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const deleteButton = document.getElementById('delete-task');
-            const assignButton = document.getElementById('assign-user');
-            const assignCategoryButton = document.getElementById('assign-category');
+
             const accessToken = localStorage.getItem('accessToken');
             const taskId = @json($task->id);
             let users = [];
@@ -68,287 +78,9 @@
 
             //PENSAR SI MODIFICAR EL DISEÑO DE LAS PUNTUACIONES
 
-            function fetchTaskUsers() {
-                return fetch(`${apiUrl}/tasks/${taskId}/users`, {
-                        method: 'GET',
-                        /* headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                        }, */
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        const taskUsers = document.getElementById("task-users");
-                        taskUsers.innerHTML = '';
-                        users = [];
 
-                        if (data.length === 0) {
-                            taskUsers.innerHTML = '<p>No hay usuarios asignados a esta tarea.</p>';
-                        } else {
-                            data.forEach(user => {
-                                const userContainer = document.createElement('div');
-                                userContainer.className = 'flex items-center mb-2';
 
-                                const userElement = document.createElement('p');
-                                userElement.textContent = user.name;
-                                userElement.className = 'text-gray-700 mr-4';
-                                userContainer.appendChild(userElement);
 
-                                const pointsElement = document.createElement('span');
-                                pointsElement.textContent = user.points ?? 0;
-                                pointsElement.className = 'text-gray-700 mr-4';
-                                pointsElement.id = `points-${user.id}`;
-                                userContainer.appendChild(pointsElement);
-
-                                const editButton = document.createElement('button');
-                                editButton.textContent = 'Editar';
-                                editButton.className =
-                                    'bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded mr-2';
-                                editButton.onclick = () => makeEditable(user.id, user.task_id);
-                                userContainer.appendChild(editButton);
-
-                                const deleteButton = document.createElement('button');
-                                deleteButton.textContent = 'Eliminar';
-                                deleteButton.className =
-                                    'bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded';
-                                deleteButton.onclick = () => deleteUserFromTask(user.id, taskId);
-                                userContainer.appendChild(deleteButton);
-
-                                taskUsers.appendChild(userContainer);
-                                users.push(user);
-                            });
-                        }
-                    });
-            }
-
-            function makeEditable(userId, taskId) {
-                const pointsElement = document.getElementById(`points-${userId}`);
-                const oldPoints = pointsElement.textContent;
-                pointsElement.innerHTML =
-                    `<input type="number" id="points-input-${userId}" value="${oldPoints}" class="border border-gray-400 px-2 py-1 rounded">`;
-
-                const editButton = pointsElement.nextSibling;
-                editButton.textContent = 'Guardar';
-                editButton.onclick = () => savePoints(userId, taskId);
-            }
-
-            function savePoints(userId) {
-                const inputElement = document.getElementById(`points-input-${userId}`);
-                const newPoints = inputElement.value;
-
-                const method = inputElement.dataset.exists ? 'PATCH' : 'POST';
-
-                fetch(`${apiUrl}/scoresAPI/${userId}/${taskId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            /* 'Authorization': `Bearer ${accessToken}`, */
-                        },
-                        body: JSON.stringify({
-                            points: newPoints
-                        })
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        const pointsElement = document.getElementById(`points-${userId}`);
-                        pointsElement.textContent = data.points;
-
-                        const editButton = document.querySelector(`#points-${userId} + button`);
-                        editButton.textContent = 'Editar';
-                        editButton.onclick = () => makeEditable(userId);
-                    });
-            }
-
-            function deleteUserFromTask(userId, taskId) {
-                if (confirm('¿Estás seguro de que deseas eliminar este usuario de la tarea?')) {
-                    fetch(`${apiUrl}/tasks/${taskId}/users/${userId}`, {
-                            method: 'DELETE',
-                            /* headers: {
-                                'Authorization': `Bearer ${accessToken}`,
-                            }, */
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            fetchTaskUsers();
-                        });
-                }
-            }
-
-            function fetchTaskCategories() {
-                return fetch(`${apiUrl}/tasks/${taskId}/categories`, {
-                        method: 'GET',
-                        /* headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                        }, */
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error al obtener las categorías de la tarea.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const categoryList = document.getElementById("category-list");
-                        categoryList.innerHTML = '';
-                        categories = [];
-
-                        if (data.length === 0) {
-                            categoryList.innerHTML = '<li>No hay categorías asignadas a esta tarea.</li>';
-                        } else {
-                            data.forEach(category => {
-                                const listItem = document.createElement('li');
-                                listItem.textContent = category.name;
-                                listItem.className = 'text-gray-700';
-                                categoryList.appendChild(listItem);
-
-                                categories.push(category.id);
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener las categorías de la tarea:', error.message);
-                    });
-            }
-
-            function fetchAllUsers() {
-                return fetch(`${apiUrl}/usersAPI`, {
-                        method: 'GET',
-                        /* headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                        }, */
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error al obtener los usuarios.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const userSelect = document.getElementById("user-select");
-                        userSelect.innerHTML = '<option value="">Seleccione un usuario</option>';
-
-                        const filteredUsers = data.filter(user => !user.rol.includes('supervisor') && !users
-                            .includes(user.id));
-
-                        filteredUsers.forEach(user => {
-                            const option = document.createElement('option');
-                            option.value = user.id;
-                            option.textContent = user.name;
-                            userSelect.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener los usuarios:', error.message);
-                    });
-            }
-
-            function fetchAllCategories() {
-                return fetch(`${apiUrl}/categoriesAPI`, {
-                        method: 'GET',
-                        /* headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                        }, */
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Error al obtener las categorías.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        const categorySelect = document.getElementById("category-select");
-                        categorySelect.innerHTML = '<option value="">Seleccione una categoría</option>';
-
-                        const filteredCategories = data.filter(category => !categories
-                            .includes(category.id));
-
-                        filteredCategories.forEach(category => {
-                            const option = document.createElement('option');
-                            option.value = category.id;
-                            option.textContent = category.name;
-                            categorySelect.appendChild(option);
-                        });
-                    })
-                    .catch(error => {
-                        console.error('Error al obtener las categorías:', error.message);
-                    });
-            }
-
-            function assignUserToTask() {
-                const userId = document.getElementById('user-select').value;
-
-                if (!userId) {
-                    alert('Por favor, seleccione un usuario.');
-                    return;
-                }
-
-                return fetch(`${apiUrl}/tasks/${taskId}/assign-user`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                            /* 'Authorization': `Bearer ${accessToken}`, */
-                        },
-                        body: JSON.stringify({
-                            user_id: userId
-                        }),
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.json().then(data => {
-                                throw new Error(data.error || 'Error al asignar el usuario.');
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        alert('Usuario asignado correctamente.');
-                        document.getElementById('user-select').value = '';
-
-                        fetchTaskUsers();
-                        fetchAllUsers();
-                    })
-                    .catch(error => {
-                        console.error('Error al asignar el usuario:', error.message);
-                    });
-            }
-
-            function assignCategoryToTask() {
-                const categoryId = document.getElementById('category-select').value;
-
-                if (!categoryId) {
-                    alert('Por favor, seleccione una categoría.');
-                    return;
-                }
-
-                return fetch(`${apiUrl}/tasks/${taskId}/assign-category`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                            /* 'Authorization': `Bearer ${accessToken}`, */
-                        },
-                        body: JSON.stringify({
-                            category_id: categoryId
-                        }),
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            return response.json().then(data => {
-                                throw new Error(data.error || 'Error al asignar la categoría.');
-                            });
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        alert('Categoría asignada correctamente.');
-                        document.getElementById('category-select').value = '';
-
-                        fetchTaskCategories();
-                        fetchAllCategories();
-
-                    })
-                    .catch(error => {
-                        console.error('Error al asignar la categoría:', error.message);
-                    });
-            }
 
             function assignScoreToUser(userId) {
                 const points = document.getElementById(`points-${userId}`).value;
@@ -387,28 +119,56 @@
                     });
             }
 
-            function deleteTask() {
-                return fetch(`${apiUrl}/tasksAPI/${taskId}`, {
-                        method: 'DELETE',
+            function makeEditable(userId, taskId) {
+                console.log(0);
+                const pointsElement = document.getElementById(`points-${userId}`);
+                const oldPoints = pointsElement.textContent;
+                pointsElement.innerHTML =
+                    `<input type="number" id="points-input-${userId}" value="${oldPoints}" class="border border-gray-400 px-2 py-1 rounded">`;
+
+                const editButton = pointsElement.nextSibling;
+                editButton.textContent = 'Guardar';
+                editButton.onclick = () => savePoints(userId, taskId);
+            }
+
+            function savePoints(userId) {
+                const inputElement = document.getElementById(`points-input-${userId}`);
+                const newPoints = inputElement.value;
+
+                const method = inputElement.dataset.exists ? 'PATCH' : 'POST';
+
+                fetch(`${apiUrl}/scoresAPI/${userId}/${taskId}`, {
+                        method: 'PATCH',
                         headers: {
-                            'Authorization': `Bearer ${accessToken}`,
+                            'Content-Type': 'application/json',
+                            // 'Authorization': `Bearer ${accessToken}`,
                         },
+                        body: JSON.stringify({
+                            points: newPoints
+                        })
                     })
-                    .then(response => {
-                        if (response.status === 204) {
-                            window.location.href = '/tasks';
-                        } else {
-                            return response.json().then(data => {
-                                throw new Error(data.error || 'Error al borrar.');
-                            });
-                        }
-                    })
-                    .catch(error => {
-                        console.error(error.message);
+                    .then(response => response.json())
+                    .then(data => {
+                        const pointsElement = document.getElementById(`points-${userId}`);
+                        pointsElement.textContent = data.points;
+
+                        const editButton = document.querySelector(`#points-${userId} + button`);
+                        editButton.textContent = 'Editar';
+                        editButton.onclick = () => makeEditable(userId);
                     });
             }
 
-            function toggleEditMode(userId) {
+
+            initializeDeleteTask(apiUrl, taskId, accessToken);
+
+            initializeCategoryFunctions(apiUrl, taskId, categories);
+
+            initializeUserFunctions(apiUrl, taskId, users);
+
+            initializeScoreFunctions(apiUrl, taskId);
+
+            /* function toggleEditMode(userId) {
+                console.log(1);
                 const pointsDisplay = document.getElementById(`points-display-${userId}`);
                 const pointsInput = document.getElementById(`points-input-${userId}`);
                 const editButton = document.getElementById(`edit-button-${userId}`);
@@ -448,26 +208,28 @@
                     .catch(error => {
                         console.error('Error al guardar la puntuación:', error.message);
                     });
-            }
+            } */
 
-            fetchTaskUsers();
-            fetchTaskCategories();
-            fetchAllUsers();
-            fetchAllCategories();
+            /* fetchTaskUsers();
 
-            deleteButton.addEventListener('click', function() {
-                if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
-                    deleteTask();
-                }
-            });
+            fetchAllUsers(); */
 
-            assignButton.addEventListener('click', function() {
+
+            /* initializeFetchTaskCategories(apiUrl, taskId, categories);
+            initializeFetchAllCategories(apiUrl, categories);
+            initializeAssignCategoryToTask(apiUrl, taskId, categories); */
+
+            //initializeFetchTaskCategories(apiUrl, taskId, categories);
+            //initializeFetchAllCategories(apiUrl, categories);
+
+
+
+            /* assignButton.addEventListener('click', function() {
                 assignUserToTask();
-            });
+            }); */
 
-            assignCategoryButton.addEventListener('click', function() {
-                assignCategoryToTask();
-            });
         });
     </script>
+
+
 @endsection

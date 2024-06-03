@@ -36,11 +36,11 @@ function displayMessages(messages, chatContainer, authUser, otherUser) {
         if (message.sender_id === authUser.id) {
             messageElement.classList.add('bg-green-100', 'self-end', 'text-right');
             messageElement.innerHTML =
-                `<span class="font-bold">${authUser.username}</span>: ${message.content}`;
+                `<span class="font-bold">${authUser.username}</span>: ${message.content} ${formatDate(message.created_at)}`;
         } else {
             messageElement.classList.add('bg-red-100', 'self-start', 'text-left');
             messageElement.innerHTML =
-                `<span class="font-bold">${otherUser.username}</span>: ${message.content}`;
+                `<span class="font-bold">${otherUser.username}</span>: ${message.content} ${formatDate(message.created_at)}`;
         }
         chatContainer.appendChild(messageElement);
     });
@@ -75,6 +75,14 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
         .catch(error => {
             console.error('There was a problem with the send operation:', error);
         });
+}
+
+function formatDate(dateString) {
+    const localeDate = {
+        hour: '2-digit',
+        minute: '2-digit'
+    };
+    return new Date(dateString).toLocaleDateString('es-ES', localeDate);
 }
 
 window.initializeChat = function (authUser, otherUser, accessToken) {

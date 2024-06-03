@@ -7,9 +7,17 @@ document.addEventListener('DOMContentLoaded', function () {
     const messagesLink = document.getElementById('messages-link');
     const profileLink = document.getElementById('profile-link');
     const calendarLink = document.getElementById('calendar-link');
+    const usersLink = document.getElementById('users-link');
 
+    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const accessToken = localStorage.getItem('accessToken');
     const apiUrl = 'http://127.0.0.1:8000/api/logout';
+
+    if (userInfo && userInfo.rol.toLocaleLowerCase() == 'admin') {
+        usersLink.classList.remove('hidden');
+    } else {
+        usersLink.classList.add('hidden');
+    }
 
     if (accessToken) {
         if (loginLink) loginLink.classList.add('hidden');

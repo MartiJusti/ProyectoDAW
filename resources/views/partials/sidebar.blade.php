@@ -25,14 +25,19 @@
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Tareas</a>
         <a href="{{ route('tasks.create') }}" id="task-create-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Crear Tarea</a>
+        <a href="{{ route('users.index') }}" id="users-link"
+            class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Usuarios</a>
         <a href="{{ route('messages.index') }}" id="messages-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Mensajes</a>
         <a href="{{ route('calendar') }}" id="calendar-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Calendario</a>
-        <a href="{{ route('users.account') }}" id="profile-link"
-            class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Perfil</a>
-        <a id="logout-link" class="block py-2 px-4 border-b border-gray-300 cursor-pointer hover:bg-gray-200">Cerrar
-            sesión</a>
+
+        <div class="absolute bottom-0 pr-4 mb-3 space-y-4 w-full">
+            <a href="{{ route('users.account') }}" id="profile-link"
+                class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Perfil</a>
+            <a id="logout-link" class="block py-2 px-4 cursor-pointer hover:bg-gray-200">Cerrar
+                sesión</a>
+        </div>
     </nav>
 </div>
 
