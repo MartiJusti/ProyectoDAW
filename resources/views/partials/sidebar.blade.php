@@ -42,5 +42,4 @@
 </div>
 
 {{-- Estas directrices vite no está dentro de @section('scripts') porque no utilizan el layout --}}
-@vite('resources/js/auth/logout.js')
-@vite('resources/js/misc/sidebar.js')
+@vite(['resources/js/auth/logout.js', 'resources/js/misc/sidebar.js'])

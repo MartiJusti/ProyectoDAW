@@ -7,12 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title')</title>
     @yield('styles')
-    @vite('resources/css/app.css')
-    <style>
-        body.loading {
-            visibility: hidden;
-        }
-    </style>
+    @vite(['resources/css/app.css', 'resources/css/layout/style.css'])
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 

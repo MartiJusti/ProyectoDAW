@@ -58,10 +58,8 @@
 @endsection
 
 @section('scripts')
-    @vite('resources/js/tasks/users.js')
-    @vite('resources/js/tasks/destroy.js')
-    @vite('resources/js/categories/main.js')
-    @vite('resources/js/scores/main.js')
+    @vite(['resources/js/tasks/users.js', 'resources/js/tasks/destroy.js', 'resources/js/categories/main.js', 'resources/js/scores/main.js'])
+
     {{-- @vite('resources/js/categories/index.js')
     @vite('resources/js/categories/getFromTask.js')
     @vite('resources/js/categories/assignToTask.js') --}}
