@@ -57,60 +57,17 @@
 @endsection
 
 @section('scripts')
+    @vite('resources/js/tasks/edit.js')
+
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const taskForm = document.getElementById('task-form');
-            const accessToken = localStorage.getItem('accessToken');
             const taskId = @json($task->id);
+            const accessToken = localStorage.getItem('accessToken');
 
-            const apiUrl = 'http://127.0.0.1:8000/api/tasksAPI/';
+            console.log(taskId);
+            console.log(accessToken);
 
-            taskForm.addEventListener('submit', function(e) {
-                e.preventDefault();
-
-                const formData = new FormData(taskForm);
-                const jsonData = {};
-
-                formData.forEach((value, key) => {
-                    jsonData[key] = value;
-                });
-
-                fetch(`${apiUrl}${taskId}`, {
-                        method: 'PATCH',
-                        headers: {
-                            'Authorization': `Bearer ${accessToken}`,
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify(jsonData)
-                    })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Datos de tarea incorrectos.');
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                        console.log(data.id);
-
-                        Toastify({
-                            text: "¡Tarea editada con éxito!",
-
-                            duration: 1500,
-                            gravity: "top",
-                            position: "right",
-                            style: {
-                                background: "linear-gradient(to right, #00b09b, #96c93d)",
-                            },
-
-                        }).showToast();
-
-                        window.location.href = `/tasks/${data.id}`;
-                    })
-                    .catch(error => {
-                        console.error(error.message);
-                    });
-            });
+            initializeEditTask(taskId, accessToken);
         });
     </script>
 @endsection

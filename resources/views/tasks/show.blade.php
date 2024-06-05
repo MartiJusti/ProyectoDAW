@@ -90,7 +90,7 @@
                     return;
                 }
 
-                return fetch(`${apiUrl}/scoresAPI`, {
+                return fetch(`${apiUrl}/scores`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
@@ -115,7 +115,7 @@
                         fetchTaskUsers();
                     })
                     .catch(error => {
-                        console.error('Error al asignar la puntuación:', error.message);
+                        /* console.error(error.message); */
                     });
             }
 
@@ -137,11 +137,11 @@
 
                 const method = inputElement.dataset.exists ? 'PATCH' : 'POST';
 
-                fetch(`${apiUrl}/scoresAPI/${userId}/${taskId}`, {
+                fetch(`${apiUrl}/scores/${userId}/${taskId}`, {
                         method: 'PATCH',
                         headers: {
                             'Content-Type': 'application/json',
-                            // 'Authorization': `Bearer ${accessToken}`,
+                            'Authorization': `Bearer ${accessToken}`,
                         },
                         body: JSON.stringify({
                             points: newPoints
@@ -161,11 +161,11 @@
 
             initializeDeleteTask(apiUrl, taskId, accessToken);
 
-            initializeCategoryFunctions(apiUrl, taskId, categories);
+            initializeCategoryFunctions(apiUrl, taskId, categories, accessToken);
 
-            initializeUserFunctions(apiUrl, taskId, users);
+            initializeUserFunctions(apiUrl, taskId, users, accessToken);
 
-            initializeScoreFunctions(apiUrl, taskId);
+            initializeScoreFunctions(apiUrl, taskId, accessToken);
 
             /* function toggleEditMode(userId) {
                 console.log(1);
@@ -189,7 +189,7 @@
             function saveScore(userId) {
                 const pointsInput = document.getElementById(`points-input-${userId}`).value;
 
-                return fetch(`${apiUrl}/scoresAPI/${userId}`, {
+                return fetch(`${apiUrl}/scores/${userId}`, {
                         method: 'PUT',
                         headers: {
                             'Content-Type': 'application/json'
@@ -206,7 +206,7 @@
                         fetchTaskUsers();
                     })
                     .catch(error => {
-                        console.error('Error al guardar la puntuación:', error.message);
+                        console.error(error.message);
                     });
             } */
 

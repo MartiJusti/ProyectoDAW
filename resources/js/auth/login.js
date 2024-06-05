@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 showToast("Sesión iniciada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
             })
             .catch(error => {
-                console.error('Error al iniciar sesión:', error.message);
+                /* console.error(error.message); */
                 alert(error.message);
             });
     });

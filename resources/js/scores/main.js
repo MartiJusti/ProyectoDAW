@@ -1,7 +1,10 @@
-async function fetchUserScores(apiUrl, taskId) {
+async function fetchUserScores(apiUrl, taskId, accessToken) {
     try {
         const response = await fetch(`${apiUrl}/scores/tasks/${taskId}`, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
         });
 
         if (!response.ok) {
@@ -30,9 +33,11 @@ async function fetchUserScores(apiUrl, taskId) {
             const tbody = document.createElement('tbody');
 
             for (const score of scores) {
-                console.log(score.user_id);
-                const userResponse = await fetch(`${apiUrl}/usersAPI/${score.user_id}`, {
+                const userResponse = await fetch(`${apiUrl}/users/${score.user_id}`, {
                     method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${accessToken}`
+                    }
                 });
 
                 if (!userResponse.ok) {
@@ -40,7 +45,6 @@ async function fetchUserScores(apiUrl, taskId) {
                 }
 
                 const user = await userResponse.json();
-                console.log(user);
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td class="py-2">${user.name}</td>
@@ -53,10 +57,10 @@ async function fetchUserScores(apiUrl, taskId) {
             scoresContainer.appendChild(table);
         }
     } catch (error) {
-        console.error('Error al obtener las puntuaciones de los usuarios:', error.message);
+        /* console.error(error.message); */
     }
 }
 
-window.initializeScoreFunctions = function (apiUrl, taskId) {
-    fetchUserScores(apiUrl, taskId);
+window.initializeScoreFunctions = function (apiUrl, taskId, accessToken) {
+    fetchUserScores(apiUrl, taskId, accessToken);
 };

@@ -1,4 +1,4 @@
-@extends('layout')
+{{-- @extends('layout')
 
 @section('title', 'Página principal')
 
@@ -93,3 +93,4 @@
         });
     </script>
 @endsection
+ --}}

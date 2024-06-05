@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const taskForm = document.getElementById('task-form');
     const accessToken = localStorage.getItem('accessToken');
 
-    const apiUrl = 'http://127.0.0.1:8000/api/tasksAPI';
+    const apiUrl = 'http://127.0.0.1:8000/api/tasks';
 
     taskForm.addEventListener('submit', function (e) {
         e.preventDefault();
@@ -23,7 +23,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 return response.json();
             })
             .then(data => {
-                console.log(data);
                 taskForm.reset();
 
                 Toastify({
@@ -42,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 }).showToast();
             })
             .catch(error => {
-                console.error(error.message);
+                /* console.error(error.message); */
             });
     });
 });

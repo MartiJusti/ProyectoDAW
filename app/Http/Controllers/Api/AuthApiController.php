@@ -30,10 +30,6 @@ class AuthApiController extends Controller
             'rol' => $request->rol ?? 'participant'
         ]);
 
-        /* $avatar = Avatar::create($user->name)->getImageObject()->encode('png');
-        Storage::disk('public')->put('avatars/avatar-' . $user->id . '.png', (string) $avatar); */
-
-
         return response()->json($user);
     }
 

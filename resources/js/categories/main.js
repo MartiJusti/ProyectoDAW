@@ -1,7 +1,10 @@
-async function fetchAllCategories(apiUrl, taskCategories) {
+async function fetchAllCategories(apiUrl, taskCategories, accessToken) {
     try {
-        const response = await fetch(`${apiUrl}/categoriesAPI`, {
+        const response = await fetch(`${apiUrl}/categories`, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
         });
 
         if (!response.ok) {
@@ -21,14 +24,17 @@ async function fetchAllCategories(apiUrl, taskCategories) {
             categorySelect.appendChild(option);
         });
     } catch (error) {
-        console.error('Error al obtener las categorías:', error.message);
+        /* console.error(error.message); */
     }
 }
 
-async function fetchTaskCategories(apiUrl, taskId, categories) {
+async function fetchTaskCategories(apiUrl, taskId, categories, accessToken) {
     try {
         const response = await fetch(`${apiUrl}/tasks/${taskId}/categories`, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
         });
 
         if (!response.ok) {
@@ -53,11 +59,11 @@ async function fetchTaskCategories(apiUrl, taskId, categories) {
             });
         }
     } catch (error) {
-        console.error('Error al obtener las categorías de la tarea:', error.message);
+        /* console.error(error.message); */
     }
 }
 
-async function assignCategoryToTask(apiUrl, taskId, categories) {
+async function assignCategoryToTask(apiUrl, taskId, categories, accessToken) {
     const categoryId = document.getElementById('category-select').value;
 
     if (!categoryId) {
@@ -69,7 +75,9 @@ async function assignCategoryToTask(apiUrl, taskId, categories) {
         const response = await fetch(`${apiUrl}/tasks/${taskId}/assign-category`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+
             },
             body: JSON.stringify({
                 category_id: categoryId
@@ -89,7 +97,7 @@ async function assignCategoryToTask(apiUrl, taskId, categories) {
         await fetchAllCategories(apiUrl, categories);
 
     } catch (error) {
-        console.error('Error al asignar la categoría:', error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -105,12 +113,12 @@ function showToast(message, background) {
     }).showToast();
 }
 
-window.initializeCategoryFunctions = function (apiUrl, taskId, categories) {
-    fetchTaskCategories(apiUrl, taskId, categories);
-    fetchAllCategories(apiUrl, categories);
+window.initializeCategoryFunctions = function (apiUrl, taskId, categories, accessToken) {
+    fetchTaskCategories(apiUrl, taskId, categories, accessToken);
+    fetchAllCategories(apiUrl, categories, accessToken);
 
     const assignCategoryButton = document.getElementById('assign-category');
     assignCategoryButton.addEventListener('click', function () {
-        assignCategoryToTask(apiUrl, taskId, categories);
+        assignCategoryToTask(apiUrl, taskId, categorie, accessToken);
     });
 };

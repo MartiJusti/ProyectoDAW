@@ -56,6 +56,7 @@ class TaskUserApiController extends Controller
         return response()->json(['message' => 'User removed from task successfully'], 200);
     }
 
+    //Estas tareas son para el calendario, ya que para que las muestre las fechas han de tener esos nombres
     public function calendarTasks(User $user)
     {
         $tasks = $user->tasks()->get(['id', 'name as title', 'date_start as start', 'date_end as end']);

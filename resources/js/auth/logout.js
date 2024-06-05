@@ -52,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     window.location.href = "/login";
                 })
                 .catch(error => {
-                    console.error('Error al cerrar sesión:', error);
+                    /* console.error(error); */
                 });
         });
     }

@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
             displayTasks(tasks);
         })
         .catch(error => {
-            console.error('Error al obtener las tareas:', error);
+            /* console.error(error); */
         });
 
     searchInput.addEventListener('input', function (e) {
@@ -35,6 +35,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
     function displayTasks(tasks) {
         taskList.innerHTML = '';
+
+        if (tasks.length === 0) {
+            const noTasksMessage = document.createElement('p');
+            noTasksMessage.textContent = 'No hay ninguna tarea.';
+            noTasksMessage.classList.add('text-gray-500', 'text-center', 'mt-4');
+            taskList.appendChild(noTasksMessage);
+            return;
+        }
 
         tasks.forEach(task => {
             const card = document.createElement('div');

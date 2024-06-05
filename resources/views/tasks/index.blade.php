@@ -1,13 +1,13 @@
 @extends('layout')
 
-@section('title', 'Tareas')
+@section('title', 'Página principal')
 
 @section('content')
     <div class="container mx-auto px-4">
         <h1 class="text-3xl font-bold mt-8 mb-4">Listado de Tareas</h1>
 
         <div>
-            <input type="text" id="search" placeholder="Buscar tareas..." class="mb-4 p-2 border rounded w-full">
+            <input type="text" id="search" placeholder="Buscar tareas..." class="mb-4 p-2 border rounded w-3/12">
         </div>
 
         <div id="task-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">

@@ -19,9 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         const apiUrl = 'http://127.0.0.1:8000/api/register';
         const formData = new FormData(registerForm);
 
-        formData.forEach((value, key) => {
-            console.log(`${key}: ${value}`);
-        });
         fetch(apiUrl, {
                 method: 'POST',
                 body: formData
@@ -38,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 registerForm.reset();
             })
             .catch(error => {
-                console.error('Error al crear cuenta:', error.message);
+                /* console.error(error.message); */
 
             });
     });

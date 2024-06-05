@@ -1,5 +1,5 @@
 function deleteTask(apiUrl, taskId, accessToken) {
-    return fetch(`${apiUrl}/tasksAPI/${taskId}`, {
+    return fetch(`${apiUrl}/tasks/${taskId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
@@ -7,27 +7,32 @@ function deleteTask(apiUrl, taskId, accessToken) {
         })
         .then(response => {
             if (response.status === 204) {
-                Toastify({
-                    text: "¡Tarea eliminada con éxito!",
-                    duration: 1000,
-                    gravity: "top",
-                    position: "right",
-                    style: {
-                        background: "linear-gradient(to right, #00b09b, #96c93d)",
-                    },
-                    callback: function () {
-                        window.location.href = '/tasks';
-                    }
-                }).showToast();
+                showToast("Tarea eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
             } else {
                 return response.json().then(data => {
                     throw new Error(data.error || 'Error al borrar.');
                 });
+
             }
         })
         .catch(error => {
-            console.error(error.message);
+            /* console.error(error.message); */
         });
+}
+
+function showToast(message, background) {
+    Toastify({
+        text: message,
+        duration: 1500,
+        gravity: "top",
+        position: "right",
+        style: {
+            background: background,
+        },
+        callback: function () {
+            window.location.href = '/tasks';
+        }
+    }).showToast();
 }
 
 window.initializeDeleteTask = function (apiUrl, taskId, accessToken) {

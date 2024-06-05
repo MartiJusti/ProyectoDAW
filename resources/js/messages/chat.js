@@ -17,7 +17,7 @@ function fetchMessages(otherUserId, accessToken, chatContainer, authUser, otherU
             displayMessages(messages, chatContainer, authUser, otherUser);
         })
         .catch(error => {
-            console.error('There was a problem with the fetch operation:', error);
+            /* console.error(error); */
         });
 }
 
@@ -51,7 +51,7 @@ function displayMessages(messages, chatContainer, authUser, otherUser) {
 function sendMessage(content, accessToken, senderId, receiverId, callback) {
     const apiUrl = 'http://127.0.0.1:8000/api';
 
-    fetch(`${apiUrl}/messagesAPI`, {
+    fetch(`${apiUrl}/messages`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -73,7 +73,7 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
             callback();
         })
         .catch(error => {
-            console.error('There was a problem with the send operation:', error);
+            /* console.error(error); */
         });
 }
 

@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const authUser = JSON.parse(localStorage.getItem('userInfo'));
     const apiUrl = 'http://127.0.0.1:8000/api';
 
-    fetch(`${apiUrl}/usersAPI`, {
+    fetch(`${apiUrl}/users`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -30,6 +30,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
         })
         .catch(error => {
-            console.error('Error al obtener la lista de usuarios:', error);
+            /* console.error(error); */
         });
 });

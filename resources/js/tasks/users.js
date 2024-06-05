@@ -1,8 +1,11 @@
 
-async function fetchTaskUsers(apiUrl, taskId, users) {
+async function fetchTaskUsers(apiUrl, taskId, users, accessToken) {
     try {
         const response = await fetch(`${apiUrl}/tasks/${taskId}/users`, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
         });
 
         if (!response.ok) {
@@ -51,15 +54,18 @@ async function fetchTaskUsers(apiUrl, taskId, users) {
             });
         }
     } catch (error) {
-        console.error('Error al obtener los usuarios de la tarea:', error.message);
+        /* console.error(error.message); */
     }
 }
 
-async function deleteUserFromTask(apiUrl, userId, taskId, users) {
+async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
     if (confirm('¿Estás seguro de que deseas eliminar este usuario de la tarea?')) {
         try {
             const response = await fetch(`${apiUrl}/tasks/${taskId}/users/${userId}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
             });
 
             if (!response.ok) {
@@ -71,15 +77,18 @@ async function deleteUserFromTask(apiUrl, userId, taskId, users) {
             await fetchTaskUsers(apiUrl, taskId, users);
             await fetchAllUsers(apiUrl, users);
         } catch (error) {
-            console.error('Error al eliminar el usuario de la tarea:', error.message);
+            /* console.error(error.message); */
         }
     }
 }
 
-async function fetchAllUsers(apiUrl, users) {
+async function fetchAllUsers(apiUrl, users, accessToken) {
     try {
-        const response = await fetch(`${apiUrl}/usersAPI`, {
+        const response = await fetch(`${apiUrl}/users`, {
             method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
         });
 
         if (!response.ok) {
@@ -99,11 +108,11 @@ async function fetchAllUsers(apiUrl, users) {
             userSelect.appendChild(option);
         });
     } catch (error) {
-        console.error('Error al obtener los usuarios:', error.message);
+        /* console.error(error.message); */
     }
 }
 
-async function assignUserToTask(apiUrl, taskId, users) {
+async function assignUserToTask(apiUrl, taskId, users, accessToken) {
     const userId = document.getElementById('user-select').value;
 
     if (!userId) {
@@ -115,7 +124,9 @@ async function assignUserToTask(apiUrl, taskId, users) {
         const response = await fetch(`${apiUrl}/tasks/${taskId}/assign-user`, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+
             },
             body: JSON.stringify({
                 user_id: userId
@@ -135,7 +146,7 @@ async function assignUserToTask(apiUrl, taskId, users) {
         await fetchAllUsers(apiUrl, users);
 
     } catch (error) {
-        console.error('Error al asignar el usuario:', error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -151,12 +162,12 @@ function showToast(message, background) {
     }).showToast();
 }
 
-window.initializeUserFunctions = function (apiUrl, taskId, users) {
-    fetchTaskUsers(apiUrl, taskId, users);
-    fetchAllUsers(apiUrl, users);
+window.initializeUserFunctions = function (apiUrl, taskId, users, accessToken) {
+    fetchTaskUsers(apiUrl, taskId, users, accessToken);
+    fetchAllUsers(apiUrl, users, accessToken);
 
     const assignButton = document.getElementById('assign-user');
     assignButton.addEventListener('click', function () {
-        assignUserToTask(apiUrl, taskId, users);
+        assignUserToTask(apiUrl, taskId, users, accessToken);
     });
 };

@@ -22,39 +22,8 @@ use App\Http\Controllers\Api\CategoryTaskController;
 |
 */
 
-/*Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
-});*/
-
-
-// REVISAR RUTAS DE API AL FINALIZAR EL PROYECTO
-Route::get('/calendar/{user}/tasks', [TaskUserApiController::class, 'calendarTasks']);
-
-Route::get('/users/{user}/tasks', [TaskUserApiController::class, 'getTasksUser']);
-Route::get('/tasks/{task}/users', [TaskUserApiController::class, 'getUsersTask']);
-Route::post('/tasks/{task}/assign-user', [TaskUserApiController::class, 'assignUserToTask']);
-Route::delete('/tasks/{taskId}/users/{userId}', [TaskUserApiController::class, 'removeUserFromTask']);
-
-Route::get('/categories/{category}/tasks', [CategoryTaskController::class, 'getTasksCategory']);
-Route::get('/tasks/{task}/categories', [CategoryTaskController::class, 'getCategoriesTask']);
-Route::post('/tasks/{task}/assign-category', [CategoryTaskController::class, 'assignCategoryToTask']);
-
-Route::get('/scores/users/{userId}', [ScoreApiController::class, 'getScoresByUserId']);
-Route::get('/scores/tasks/{taskId}', [ScoreApiController::class, 'getScoresByTaskId']);
-Route::get('/scores/users/{userId}/tasks/{taskId}', [ScoreApiController::class, 'getScoreByUserIdAndTaskId']);
-Route::patch('/scoresAPI/{userId}/{taskId}', [ScoreApiController::class, 'updateByUserIdAndTaskId']);
-
 Route::post('/register', [AuthApiController::class, 'register']);
 Route::post('/login', [AuthApiController::class, 'login']);
-
-
-Route::apiResource('categoriesAPI', CategoryApiController::class);
-
-
-
-Route::apiResource('scoresAPI', ScoreApiController::class);
-
-Route::apiResource('usersAPI', UserApiController::class);
 
 Route::group([
     'middleware' => ['auth:sanctum']
@@ -64,13 +33,35 @@ Route::group([
         return $request->user();
     });
 
+    Route::get('/calendar/{user}/tasks', [TaskUserApiController::class, 'calendarTasks']);
+
+    Route::get('/users/{user}/tasks', [TaskUserApiController::class, 'getTasksUser']);
+    Route::get('/tasks/{task}/users', [TaskUserApiController::class, 'getUsersTask']);
+    Route::post('/tasks/{task}/assign-user', [TaskUserApiController::class, 'assignUserToTask']);
+    Route::delete('/tasks/{taskId}/users/{userId}', [TaskUserApiController::class, 'removeUserFromTask']);
+
+    Route::get('/categories/{category}/tasks', [CategoryTaskController::class, 'getTasksCategory']);
+    Route::get('/tasks/{task}/categories', [CategoryTaskController::class, 'getCategoriesTask']);
+    Route::post('/tasks/{task}/assign-category', [CategoryTaskController::class, 'assignCategoryToTask']);
+
+    Route::get('/scores/users/{userId}', [ScoreApiController::class, 'getScoresByUserId']);
+    Route::get('/scores/tasks/{taskId}', [ScoreApiController::class, 'getScoresByTaskId']);
+    Route::get('/scores/users/{userId}/tasks/{taskId}', [ScoreApiController::class, 'getScoreByUserIdAndTaskId']);
+    Route::patch('/scores/{userId}/{taskId}', [ScoreApiController::class, 'updateByUserIdAndTaskId']);
+
     Route::get('/messages/with/{user}', [MessageApiController::class, 'getMessagesWithUser']);
 
     Route::post('logout', [AuthApiController::class, 'logout']);
 
-    Route::apiResource('tasksAPI', TaskApiController::class);
+    Route::apiResource('tasks', TaskApiController::class);
 
-    Route::apiResource('messagesAPI', MessageApiController::class);
+    Route::apiResource('messages', MessageApiController::class);
+
+    Route::apiResource('categories', CategoryApiController::class);
+
+    Route::apiResource('scores', ScoreApiController::class);
+
+    Route::apiResource('users', UserApiController::class);
 
 });
 
