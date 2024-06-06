@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Models\User;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -77,4 +78,5 @@ class MessageApiController extends Controller
 
         return response()->json($messages, 200);
     }
+
 }

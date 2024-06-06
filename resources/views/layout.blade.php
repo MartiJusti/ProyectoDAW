@@ -22,21 +22,9 @@
         @include('partials.sidebar')
     </div>
     @yield('scripts')
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const accessToken = localStorage.getItem('accessToken');
-            const isPublicView = document.body.classList.contains('public-view');
-            const currentPath = window.location.pathname;
 
-            if (!accessToken && !isPublicView && currentPath !== '{{ route('auth.login') }}') {
-                document.title = 'Redirigiendo a Login...';
-                window.location.href = "{{ route('auth.login') }}";
-            } else {
-                document.title = '@yield('title')';
-                document.body.classList.remove('loading');
-            }
-        });
-    </script>
+
+    @vite('/resources/js/layout.js')
     {{-- El script de ToastifyJS se coloca aquí porque la página web lo dice --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>

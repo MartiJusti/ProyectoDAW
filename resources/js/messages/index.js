@@ -22,12 +22,19 @@ document.addEventListener('DOMContentLoaded', function () {
                 .filter(user => user.id !== authUser.id)
                 .forEach(user => {
                     const userLink = document.createElement('a');
-                    userLink.classList.add('block', 'p-4', 'border-b', 'border-gray-200',
-                        'cursor-pointer', 'hover:bg-gray-100');
-                    userLink.textContent = user.name;
+                    userLink.classList.add('flex', 'items-center', 'p-4', 'border-b', 'border-gray-200', 'cursor-pointer', 'hover:bg-gray-100', 'gap-2');
+                    userLink.innerHTML = `<span class="font-bold">${user.username}</span> (${user.name})`;
+
+                    const userAvatar = document.createElement('img');
+                    userAvatar.src = 'storage/img/avatar.png';
+                    userAvatar.alt = 'Avatar Image';
+                    userAvatar.classList.add('h-6', 'w-6', 'md:h-8', 'md:w-8', 'rounded-full'); // Add Tailwind CSS classes for styling
+
                     userLink.href = `/chat/${user.id}`;
+                    userLink.prepend(userAvatar);
                     usersList.appendChild(userLink);
                 });
+
         })
         .catch(error => {
             /* console.error(error); */

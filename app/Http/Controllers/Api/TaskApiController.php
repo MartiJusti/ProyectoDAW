@@ -89,6 +89,7 @@ class TaskApiController extends Controller
         return response()->json($task, 204);
     }
 
+    //Método para que el administrador visualice las tareas en el calendario
     public function calendarAdminTasks()
     {
         $tasks = Task::get(['id', 'name as title', 'date_start as start', 'date_end as end']);

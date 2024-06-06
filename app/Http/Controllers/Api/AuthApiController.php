@@ -5,8 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
-use Laravolt\Avatar\Facade as Avatar;
-use Illuminate\Support\Facades\Storage;
 
 class AuthApiController extends Controller
 {

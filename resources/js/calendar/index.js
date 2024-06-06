@@ -63,6 +63,8 @@ document.addEventListener('DOMContentLoaded', async function () {
         locale: 'es',
         editable: false,
         eventStartEditable: false,
+        /* successCallback renderiza los eventos en el calendario cuando se han obtenido con éxito,
+        la función events recibe los tres parámetros, aunque luego no use todos */
         events: async function (fetchInfo, successCallback, failureCallback) {
             if (userInfo.rol === 'admin') {
                 const adminTasks = await fetchAdminEvents();

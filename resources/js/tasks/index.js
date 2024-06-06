@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
         if (tasks.length === 0) {
             const noTasksMessage = document.createElement('p');
-            noTasksMessage.textContent = 'No hay ninguna tarea.';
+            noTasksMessage.textContent = 'No se ha encontrado ninguna tarea.';
             noTasksMessage.classList.add('text-gray-500', 'text-center', 'mt-4');
             taskList.appendChild(noTasksMessage);
             return;

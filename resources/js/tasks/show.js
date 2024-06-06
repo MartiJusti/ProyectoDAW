@@ -1,3 +1,13 @@
+const supervisorPanel = document.getElementById("supervisor-panel");
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+console.log(userInfo.rol);
+
+if (userInfo.rol.toLocaleLowerCase() === "participant") {
+    supervisorPanel.classList.add('hidden');
+} else {
+    supervisorPanel.classList.remove('hidden');
+}
+
 const scoreState = {};
 
 async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken) {
@@ -92,7 +102,7 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken) {
                     <td class="px-4 py-2 border border-gray-400 text-center font-bold">${user.username}</td>
                     <td class="px-4 py-2 border border-gray-400 text-center font-bold">
                         <span id="points-${user.id}">${user.points}</span>
-                        <input type="number" id="points-input-${user.id}" value="${user.points}" class="hidden" />
+                        <input type="number" id="points-input-${user.id}" value="${user.points}" class="hidden w-1/2 md:w-1/4" />
                     </td>
                     ${userInfo.rol !== 'participant' ? `
                         <td id="buttons-${user.id}" class="px-4 py-2 border border-gray-400 text-center">
@@ -340,12 +350,3 @@ window.initializeUserAndScoreFunctions = function (apiUrl, taskId, users, access
         assignUserToTask(apiUrl, taskId, users, accessToken);
     });
 };
-
-const supervisorPanel = document.getElementById("supervisor-panel");
-const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-
-if (userInfo.rol === "participant") {
-    supervisorPanel.classList.add('hidden');
-} else {
-    supervisorPanel.classList.remove('hidden');
-}

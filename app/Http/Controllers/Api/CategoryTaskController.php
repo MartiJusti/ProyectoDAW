@@ -9,13 +9,15 @@ use App\Http\Controllers\Controller;
 
 class CategoryTaskController extends Controller
 {
-    public function getTasksCategory (Category $category) {
+    public function getTasksCategory(Category $category)
+    {
         $tasks = $category->tasks()->get();
 
         return response()->json($tasks);
     }
 
-    public function getCategoriesTask (Task $task) {
+    public function getCategoriesTask(Task $task)
+    {
         $categories = $task->categories()->get();
 
         return response()->json($categories);
@@ -39,4 +41,5 @@ class CategoryTaskController extends Controller
 
         return response()->json(['message' => 'Category assigned to task successfully'], 200);
     }
+
 }

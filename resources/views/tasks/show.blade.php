@@ -79,7 +79,7 @@
 
 
 @section('scripts')
-    @vite(['resources/js/tasks/users.js', 'resources/js/tasks/destroy.js', 'resources/js/categories/main.js', 'resources/js/scores/main.js'])
+    @vite(['resources/js/tasks/show.js', 'resources/js/tasks/destroy.js', 'resources/js/categories/main.js'])
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {

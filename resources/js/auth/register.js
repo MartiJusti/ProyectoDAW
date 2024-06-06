@@ -5,6 +5,10 @@ document.addEventListener('DOMContentLoaded', function () {
     const rolSelect = document.getElementById('rol-select');
     const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
+    if (userInfo && userInfo.rol.toLowerCase() !== 'admin') {
+        window.location.href = "/";
+    }
+
     if (userInfo && userInfo.rol.toLowerCase() === 'admin') {
         registerTitle.textContent = 'Crear cuenta';
         registerButton.textContent = 'Crear cuenta';
