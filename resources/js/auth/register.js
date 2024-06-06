@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function () {
             text: message,
             duration: 1500,
             gravity: "top",
-            position: "right",
+            position: "center",
             style: {
                 background: background,
             },

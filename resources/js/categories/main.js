@@ -24,11 +24,11 @@ async function fetchAllCategories(apiUrl, taskCategories, accessToken) {
             categorySelect.appendChild(option);
         });
     } catch (error) {
-        /* console.error(error.message); */
+        console.error(error.message);
     }
 }
 
-async function fetchTaskCategories(apiUrl, taskId, categories, accessToken) {
+async function fetchTaskCategories(apiUrl, accessToken, taskId, categories) {
     try {
         const response = await fetch(`${apiUrl}/tasks/${taskId}/categories`, {
             method: 'GET',
@@ -47,23 +47,21 @@ async function fetchTaskCategories(apiUrl, taskId, categories, accessToken) {
         categories.length = 0;
 
         if (data.length === 0) {
-            categoryList.innerHTML = '<li>No hay categorías asignadas a esta tarea.</li>';
+            categoryList.innerHTML = '<span class="text-gray-500">No hay categorías asignadas a esta tarea.</span>';
         } else {
             data.forEach(category => {
-                const listItem = document.createElement('li');
-                listItem.textContent = category.name;
-                listItem.className = 'text-gray-700';
-                categoryList.appendChild(listItem);
-
                 categories.push(category.id);
             });
+
+            const categoryNames = data.map(category => `#${category.name}`);
+            categoryList.textContent = `${categoryNames.join(', ')}`;
         }
     } catch (error) {
-        /* console.error(error.message); */
+        console.error(error.message);
     }
 }
 
-async function assignCategoryToTask(apiUrl, taskId, categories, accessToken) {
+async function assignCategoryToTask(apiUrl, accessToken, taskId, categories) {
     const categoryId = document.getElementById('category-select').value;
 
     if (!categoryId) {
@@ -77,7 +75,6 @@ async function assignCategoryToTask(apiUrl, taskId, categories, accessToken) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
-
             },
             body: JSON.stringify({
                 category_id: categoryId
@@ -89,24 +86,23 @@ async function assignCategoryToTask(apiUrl, taskId, categories, accessToken) {
             throw new Error(data.error || 'Error al asignar la categoría.');
         }
 
-        const data = await response.json();
         showToast("Categoría asignada correctamente", "linear-gradient(to right, #00b09b, #96c93d)");
         document.getElementById('category-select').value = '';
 
-        await fetchTaskCategories(apiUrl, taskId, categories);
-        await fetchAllCategories(apiUrl, categories);
+        await fetchTaskCategories(apiUrl, accessToken, taskId, categories);
+        await fetchAllCategories(apiUrl, categories, accessToken);
 
     } catch (error) {
-        /* console.error(error.message); */
+        console.error(error.message);
     }
 }
 
 function showToast(message, background) {
     Toastify({
         text: message,
-        duration: 2000,
+        duration: 1250,
         gravity: "top",
-        position: "right",
+        position: "center",
         style: {
             background: background,
         }
@@ -114,11 +110,11 @@ function showToast(message, background) {
 }
 
 window.initializeCategoryFunctions = function (apiUrl, taskId, categories, accessToken) {
-    fetchTaskCategories(apiUrl, taskId, categories, accessToken);
+    fetchTaskCategories(apiUrl, accessToken, taskId, categories);
     fetchAllCategories(apiUrl, categories, accessToken);
 
     const assignCategoryButton = document.getElementById('assign-category');
     assignCategoryButton.addEventListener('click', function () {
-        assignCategoryToTask(apiUrl, taskId, categorie, accessToken);
+        assignCategoryToTask(apiUrl, accessToken, taskId, categories);
     });
 };

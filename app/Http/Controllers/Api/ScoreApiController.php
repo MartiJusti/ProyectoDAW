@@ -97,14 +97,15 @@ class ScoreApiController extends Controller
      */
     public function getScoresByTaskId($taskId)
     {
-        $scores = Score::where('task_id', $taskId)->get();
+        $scores = Score::where('task_id', $taskId)->with('user')->get();
 
         if ($scores->isEmpty()) {
-            return response()->json(['error' => 'No se encontraron puntuaciones para esta tarea'], 404);
+            return [];
         }
 
         return response()->json($scores, 200);
     }
+
 
     public function getScoreByUserIdAndTaskId($userId, $taskId)
     {
@@ -136,6 +137,30 @@ class ScoreApiController extends Controller
         }
 
         return response()->json($score, 200);
+    }
+
+    public function updateScore(Request $request, $userId, $taskId)
+    {
+        // Lógica para actualizar la puntuación
+        $score = Score::where('user_id', $userId)->where('task_id', $taskId)->first();
+        if ($score) {
+            $score->points = $request->points;
+            $score->save();
+            return response()->json($score);
+        }
+
+        return response()->json(['error' => 'Score not found.'], 404);
+    }
+
+    public function createScore(Request $request, $userId, $taskId)
+    {
+        // Lógica para crear una nueva puntuación
+        $score = new Score;
+        $score->user_id = $userId;
+        $score->task_id = $taskId;
+        $score->points = $request->points;
+        $score->save();
+        return response()->json($score);
     }
 
 }

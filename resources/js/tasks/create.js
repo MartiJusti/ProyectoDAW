@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     duration: 1000,
                     gravity: "top",
-                    position: "right",
+                    position: "center",
                     style: {
                         background: "linear-gradient(to right, #00b09b, #96c93d)",
                     },

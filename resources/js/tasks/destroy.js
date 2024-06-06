@@ -1,23 +1,55 @@
-function deleteTask(apiUrl, taskId, accessToken) {
-    return fetch(`${apiUrl}/tasks/${taskId}`, {
+async function deleteTask(apiUrl, taskId, accessToken) {
+    try {
+        const response = await fetch(`${apiUrl}/tasks/${taskId}`, {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${accessToken}`,
             },
-        })
-        .then(response => {
-            if (response.status === 204) {
-                showToast("Tarea eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
-            } else {
-                return response.json().then(data => {
-                    throw new Error(data.error || 'Error al borrar.');
-                });
-
-            }
-        })
-        .catch(error => {
-            /* console.error(error.message); */
         });
+
+        if (response.status === 204) {
+            showToast("Tarea eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
+        } else {
+            const data = await response.json();
+            throw new Error(data.error || 'Error al borrar.');
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
+}
+
+
+function showConfirm(apiUrl, userId, taskId, users, accessToken) {
+    $.confirm({
+        title: '¿Seguro que quieres borrar esta tarea?',
+        content: 'La acción es irreversible.',
+        type: 'red',
+        boxWidth: '60%',
+        useBootstrap: false,
+        icon: 'fa fa-warning',
+        closeIcon: true,
+        closeIconClass: 'fa fa-close',
+        animateFromElement: false,
+        animation: 'scale',
+        backgroundDismiss: false,
+        backgroundDismissAnimation: 'shake',
+        buttons: {
+            confirm: {
+                text: 'Confirmar',
+                btnClass: 'btn-green',
+                action: async function () {
+                    await deleteTask(apiUrl, taskId, accessToken);
+                }
+            },
+            cancel: {
+                text: 'Cancelar',
+                btnClass: 'btn-red',
+                action: function () {
+
+                }
+            },
+        }
+    });
 }
 
 function showToast(message, background) {
@@ -25,7 +57,7 @@ function showToast(message, background) {
         text: message,
         duration: 1500,
         gravity: "top",
-        position: "right",
+        position: "center",
         style: {
             background: background,
         },
@@ -38,8 +70,8 @@ function showToast(message, background) {
 window.initializeDeleteTask = function (apiUrl, taskId, accessToken) {
     const deleteButton = document.getElementById('delete-task');
     deleteButton.addEventListener('click', function () {
-        if (confirm('¿Estás seguro de que deseas eliminar esta tarea?')) {
-            deleteTask(apiUrl, taskId, accessToken);
-        }
+
+        showConfirm(apiUrl, taskId, accessToken);
+
     });
 };

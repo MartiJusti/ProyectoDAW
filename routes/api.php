@@ -34,6 +34,7 @@ Route::group([
     });
 
     Route::get('/calendar/{user}/tasks', [TaskUserApiController::class, 'calendarTasks']);
+    Route::get('/calendar/tasks', [TaskApiController::class, 'calendarAdminTasks']);
 
     Route::get('/users/{user}/tasks', [TaskUserApiController::class, 'getTasksUser']);
     Route::get('/tasks/{task}/users', [TaskUserApiController::class, 'getUsersTask']);
@@ -47,7 +48,9 @@ Route::group([
     Route::get('/scores/users/{userId}', [ScoreApiController::class, 'getScoresByUserId']);
     Route::get('/scores/tasks/{taskId}', [ScoreApiController::class, 'getScoresByTaskId']);
     Route::get('/scores/users/{userId}/tasks/{taskId}', [ScoreApiController::class, 'getScoreByUserIdAndTaskId']);
-    Route::patch('/scores/{userId}/{taskId}', [ScoreApiController::class, 'updateByUserIdAndTaskId']);
+    //Route::patch('/scores/{userId}/{taskId}', [ScoreApiController::class, 'updateByUserIdAndTaskId']);
+    Route::patch('/scores/{userId}/{taskId}', [ScoreApiController::class, 'updateScore']);
+    Route::post('/scores/{userId}/{taskId}', [ScoreApiController::class, 'createScore']);
 
     Route::get('/messages/with/{user}', [MessageApiController::class, 'getMessagesWithUser']);
 

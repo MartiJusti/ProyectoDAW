@@ -39,7 +39,7 @@ function showToast(message, background, taskId) {
         text: message,
         duration: 1250,
         gravity: "top",
-        position: "right",
+        position: "center",
         style: {
             background: background,
         },

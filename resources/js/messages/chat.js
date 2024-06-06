@@ -36,11 +36,11 @@ function displayMessages(messages, chatContainer, authUser, otherUser) {
         if (message.sender_id === authUser.id) {
             messageElement.classList.add('bg-green-100', 'self-end', 'text-right');
             messageElement.innerHTML =
-                `<span class="font-bold">${authUser.username}</span>: ${message.content} ${formatDate(message.created_at)}`;
+                `<span class="font-bold">${authUser.username}</span>: ${message.content}`;
         } else {
             messageElement.classList.add('bg-red-100', 'self-start', 'text-left');
             messageElement.innerHTML =
-                `<span class="font-bold">${otherUser.username}</span>: ${message.content} ${formatDate(message.created_at)}`;
+                `<span class="font-bold">${otherUser.username}</span>: ${message.content}`;
         }
         chatContainer.appendChild(messageElement);
     });
@@ -77,10 +77,19 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
         });
 }
 
-function formatDate(dateString) {
+/* function formatDate(dateString) {
     const localeDate = {
         hour: '2-digit',
         minute: '2-digit'
+    };
+    return new Date(dateString).toLocaleDateString('es-ES', localeDate);
+} */
+
+function formatDate(dateString) {
+    const localeDate = {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric'
     };
     return new Date(dateString).toLocaleDateString('es-ES', localeDate);
 }

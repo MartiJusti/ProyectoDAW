@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function () {
-
+    const registerLink = document.getElementById('register-link');
     const loginLink = document.getElementById('login-link');
     const logoutLink = document.getElementById('logout-link');
     const tasksLink = document.getElementById('tasks-link');
@@ -17,6 +17,18 @@ document.addEventListener('DOMContentLoaded', function () {
         usersLink.classList.remove('hidden');
     } else {
         usersLink.classList.add('hidden');
+    }
+
+    if (userInfo && userInfo.rol.toLocaleLowerCase() == 'participant') {
+        taskCreateLink.classList.add('hidden');
+    } else {
+        taskCreateLink.classList.remove('hidden');
+    }
+
+    if (!userInfo || userInfo.rol.toLocaleLowerCase() == 'admin') {
+        registerLink.classList.remove('hidden');
+    } else {
+        registerLink.classList.add('hidden');
     }
 
     if (accessToken) {

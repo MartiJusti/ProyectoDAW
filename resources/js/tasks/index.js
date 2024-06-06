@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
     let tasks = [];
 
-    fetch(`${apiUrl}/users/${userInfo.id}/tasks`, {
+    if (userInfo.rol === "admin") {
+        fetch(`${apiUrl}/tasks`, {
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
@@ -26,10 +27,37 @@ document.addEventListener('DOMContentLoaded', function () {
         .catch(error => {
             /* console.error(error); */
         });
+    } else {
+        fetch(`${apiUrl}/users/${userInfo.id}/tasks`, {
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener las tareas');
+                }
+                return response.json();
+            })
+            .then(data => {
+                tasks = data;
+                displayTasks(tasks);
+            })
+            .catch(error => {
+                /* console.error(error); */
+            });
+    }
+
+    const normalizeString = (str) => {
+        return str
+            .normalize("NFD")
+            .replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase();
+    };
 
     searchInput.addEventListener('input', function (e) {
         const searchTerm = e.target.value.toLowerCase();
-        const filteredTasks = tasks.filter(task => task.name.toLowerCase().includes(searchTerm));
+        const filteredTasks = tasks.filter(task => normalizeString(task.name).includes(normalizeString(searchTerm)));
         displayTasks(filteredTasks);
     });
 

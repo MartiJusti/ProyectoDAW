@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', function () {
         userBirthday.textContent = formatDate(userInfo.birthday);
     }
 
+    userName.addEventListener('click', function () {
+
+    });
+
+
     function formatDate(dateString) {
         const localeDate = {
             day: '2-digit',

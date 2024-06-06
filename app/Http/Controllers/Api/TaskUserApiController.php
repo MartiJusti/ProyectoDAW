@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Task;
 use App\Models\User;
+use App\Models\Score;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -52,6 +53,11 @@ class TaskUserApiController extends Controller
         }
 
         $task->users()->detach($userId);
+
+        $score = Score::where('user_id', $userId)->where('task_id', $taskId)->first();
+        if ($score) {
+            $score->delete();
+        }
 
         return response()->json(['message' => 'User removed from task successfully'], 200);
     }

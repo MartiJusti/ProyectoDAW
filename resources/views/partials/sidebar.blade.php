@@ -19,7 +19,8 @@
     <nav class="space-y-4">
         <a href="{{ route('auth.login') }}" id="login-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Iniciar sesión</a>
-        <a href="{{ route('auth.register') }}" class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Crear
+        <a href="{{ route('auth.register') }}" id="register-link"
+            class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Crear
             cuenta</a>
         <a href="{{ route('tasks.index') }}" id="tasks-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Tareas</a>

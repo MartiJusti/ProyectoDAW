@@ -23,7 +23,6 @@ Route::get('/', function () {
     return view('tasks.index');
 });
 
-
 Route::get('login', function () {
     return view('auth.login');
 })->name('auth.login');
@@ -47,18 +46,5 @@ Route::resource('categories', CategoryController::class);
 Route::resource('messages', MessageController::class);
 Route::resource('scores', ScoreController::class);
 Route::resource('users', UserController::class);
-
-/* Route::get('/check-gd', function () {
-    if (extension_loaded('gd') && function_exists('gd_info')) {
-        $gdInfo = gd_info();
-        return response()->json($gdInfo);
-    } else {
-        return response()->json(['error' => 'GD Library is not enabled']);
-    }
-}); */
-
-Route::middleware('auth:sanctum')->group(function () {
-
-});
 
 

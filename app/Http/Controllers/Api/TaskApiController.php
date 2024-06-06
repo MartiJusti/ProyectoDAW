@@ -89,6 +89,11 @@ class TaskApiController extends Controller
         return response()->json($task, 204);
     }
 
+    public function calendarAdminTasks()
+    {
+        $tasks = Task::get(['id', 'name as title', 'date_start as start', 'date_end as end']);
+        return response()->json($tasks, 200);
 
+    }
 
 }

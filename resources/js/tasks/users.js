@@ -1,85 +1,197 @@
+const scoreState = {};
 
-async function fetchTaskUsers(apiUrl, taskId, users, accessToken) {
+async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken) {
     try {
-        const response = await fetch(`${apiUrl}/tasks/${taskId}/users`, {
+        const usersResponse = await fetch(`${apiUrl}/tasks/${taskId}/users`, {
             method: 'GET',
             headers: {
                 'Authorization': `Bearer ${accessToken}`
             }
         });
 
-        if (!response.ok) {
+        if (!usersResponse.ok) {
             throw new Error('Error al obtener los usuarios de la tarea.');
         }
 
-        const data = await response.json();
+        const usersData = await usersResponse.json();
+
+        const scoresResponse = await fetch(`${apiUrl}/scores/tasks/${taskId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!scoresResponse.ok) {
+            throw new Error('Error al obtener las puntuaciones de la tarea.');
+        }
+
+        const scoresData = await scoresResponse.json();
+
         const taskUsers = document.getElementById("task-users");
+        const scoresContainer = document.getElementById("scores");
         taskUsers.innerHTML = '';
         users.length = 0;
+        console.log(usersData);
+        if (usersData.length === 0 || (usersData.length === 1 && usersData.rol !== 'participant')) {
 
-        if (data.length === 0) {
-            taskUsers.innerHTML = '<p>No hay usuarios asignados a esta tarea.</p>';
+            scoresContainer.classList.add('flex');
+            taskUsers.classList.add('m-auto');
+            taskUsers.classList.remove('shadow-md');
+            taskUsers.innerHTML = `<span class="flex flex-col items-center justify-center text-gray-400 shadow-none">
+                                    No hay usuarios asignados a esta tarea.</span>`;
+
         } else {
-            data.forEach(user => {
-                const userContainer = document.createElement('div');
-                userContainer.className = 'flex items-center mb-2';
+            scoresContainer.classList.remove('flex');
+            taskUsers.classList.remove('m-auto');
+            taskUsers.classList.add('shadow-md');
 
-                const userElement = document.createElement('p');
-                userElement.textContent = user.name;
-                userElement.className = 'text-gray-700 mr-4';
-                userContainer.appendChild(userElement);
+            const table = document.createElement('table');
+            table.className = 'table-auto w-full border-collapse border border-gray-400 rounded-2xl';
 
-                const pointsElement = document.createElement('span');
-                pointsElement.textContent = user.points ?? 0;
-                pointsElement.className = 'text-gray-700 mr-4';
-                pointsElement.id = `points-${user.id}`;
-                userContainer.appendChild(pointsElement);
+            const tableBody = document.createElement('tbody');
+            const participantUsers = usersData.filter(user => user.rol === 'participant');
 
-                const editButton = document.createElement('button');
-                editButton.textContent = 'Editar';
-                editButton.className =
-                    'bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-2 rounded mr-2';
-                editButton.onclick = () => makeEditable(user.id, user.task_id);
-                userContainer.appendChild(editButton);
+            const combinedData = participantUsers.map(user => {
+                const userScore = scoresData.find(score => score.user.id === user.id);
 
-                const deleteButton = document.createElement('button');
-                deleteButton.textContent = 'Eliminar';
-                deleteButton.className =
-                    'bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-2 rounded';
-                deleteButton.onclick = () => deleteUserFromTask(apiUrl, user.id, taskId, users);
-                userContainer.appendChild(deleteButton);
-
-                taskUsers.appendChild(userContainer);
-                users.push(user);
+                scoreState[user.id] = {
+                    points: userScore ? userScore.points : 0,
+                    exists: !!userScore
+                };
+                return {
+                    ...user,
+                    points: scoreState[user.id].points
+                };
             });
+
+            combinedData.sort((a, b) => {
+                if (b.points === a.points) {
+                    return a.username.localeCompare(b.username);
+                }
+                return b.points - a.points;
+            });
+
+            combinedData.forEach((user, index) => {
+                const tableRow = document.createElement('tr');
+
+                switch (index) {
+                    case 0:
+                        tableRow.className = 'bg-yellow-400';
+                        break;
+                    case 1:
+                        tableRow.className = 'bg-zinc-300';
+                        break;
+                    case 2:
+                        tableRow.className = 'bg-yellow-700';
+                        break;
+                }
+
+                tableRow.innerHTML = `
+                    <td class="px-4 py-2 border border-gray-400 text-center font-bold">${index + 1}º</td>
+                    <td class="px-4 py-2 border border-gray-400 text-center font-bold">${user.username}</td>
+                    <td class="px-4 py-2 border border-gray-400 text-center font-bold">
+                        <span id="points-${user.id}">${user.points}</span>
+                        <input type="number" id="points-input-${user.id}" value="${user.points}" class="hidden" />
+                    </td>
+                    ${userInfo.rol !== 'participant' ? `
+                        <td id="buttons-${user.id}" class="px-4 py-2 border border-gray-400 text-center">
+                            <button id="edit-btn-${user.id}" class="edit-btn" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button id="delete-btn-${user.id}" class="delete-btn" title="Eliminar">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    ` : ''}
+                `;
+
+                tableBody.appendChild(tableRow);
+            });
+
+            table.appendChild(tableBody);
+            taskUsers.appendChild(table);
+
+            users.push(...usersData);
+
+            taskUsers.style.maxHeight = '200px';
+            taskUsers.style.overflowY = 'scroll';
+
+            combinedData.forEach(user => {
+                const deleteButton = document.getElementById(`delete-btn-${user.id}`);
+                deleteButton.addEventListener('click', async () => {
+                    console.log(`Deleting user with ID: ${user.id}`);
+                    showConfirm(apiUrl, user.id, taskId, users, accessToken);
+                });
+
+                const editButton = document.getElementById(`edit-btn-${user.id}`);
+                editButton.addEventListener('click', () => makeEditable(apiUrl, accessToken, user.id, taskId));
+            });
+
         }
     } catch (error) {
-        /* console.error(error.message); */
+        console.error(error.message);
     }
 }
 
-async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
-    if (confirm('¿Estás seguro de que deseas eliminar este usuario de la tarea?')) {
-        try {
-            const response = await fetch(`${apiUrl}/tasks/${taskId}/users/${userId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
+async function savePoints(apiUrl, accessToken, userId, taskId) {
+    const inputElement = document.getElementById(`points-input-${userId}`);
+    const newPoints = inputElement.value;
+    const scoreExists = scoreState[userId].exists;
+    const method = scoreExists ? 'PATCH' : 'POST';
 
-            if (!response.ok) {
-                throw new Error('Error al eliminar el usuario de la tarea.');
-            }
+    try {
+        const response = await fetch(`${apiUrl}/scores/${userId}/${taskId}`, {
+            method: method,
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({
+                points: newPoints
+            })
+        });
 
-            showToast("Se ha eliminado al usuario de la tarea correctamente", "linear-gradient(to right, #00b09b, #96c93d)");
-
-            await fetchTaskUsers(apiUrl, taskId, users);
-            await fetchAllUsers(apiUrl, users);
-        } catch (error) {
-            /* console.error(error.message); */
+        if (!response.ok) {
+            throw new Error('Error al guardar la puntuación.');
         }
+
+        const data = await response.json();
+
+        scoreState[userId] = {
+            points: data.points,
+            exists: true
+        };
+
+        const pointsElement = document.getElementById(`points-${userId}`);
+        pointsElement.textContent = data.points;
+
+        inputElement.classList.add('hidden');
+        pointsElement.classList.remove('hidden');
+
+        const editButton = document.getElementById(`edit-btn-${userId}`);
+        editButton.innerHTML = '<i class="fas fa-edit"></i>';
+        editButton.onclick = () => makeEditable(apiUrl, accessToken, userId, taskId);
+
+        showToast("Puntuación guardada correctamente", "linear-gradient(to right, #00b09b, #96c93d)");
+
+        await fetchTaskUsersAndScores(apiUrl, taskId, [], accessToken);
+
+    } catch (error) {
+        console.error(error.message);
     }
+}
+
+function makeEditable(apiUrl, accessToken, userId, taskId) {
+    const pointsElement = document.getElementById(`points-${userId}`);
+    const inputElement = document.getElementById(`points-input-${userId}`);
+    const editButton = document.getElementById(`edit-btn-${userId}`);
+
+    pointsElement.classList.add('hidden');
+    inputElement.classList.remove('hidden');
+
+    editButton.innerHTML = '<i class="fas fa-check"></i>';
+    editButton.onclick = () => savePoints(apiUrl, accessToken, userId, taskId);
 }
 
 async function fetchAllUsers(apiUrl, users, accessToken) {
@@ -99,18 +211,19 @@ async function fetchAllUsers(apiUrl, users, accessToken) {
         const userSelect = document.getElementById("user-select");
         userSelect.innerHTML = '<option value="">Seleccione un usuario</option>';
 
-        const filteredUsers = data.filter(user => !user.rol.includes('supervisor') && !users.some(u => u.id === user.id));
+        const filteredUsers = data.filter(user => !users.some(u => u.id === user.id) && !user.rol.includes('supervisor') && !user.rol.includes('admin'));
 
         filteredUsers.forEach(user => {
             const option = document.createElement('option');
             option.value = user.id;
-            option.textContent = user.name;
+            option.textContent = user.username;
             userSelect.appendChild(option);
         });
     } catch (error) {
-        /* console.error(error.message); */
+        console.error(error.message);
     }
 }
+
 
 async function assignUserToTask(apiUrl, taskId, users, accessToken) {
     const userId = document.getElementById('user-select').value;
@@ -126,7 +239,6 @@ async function assignUserToTask(apiUrl, taskId, users, accessToken) {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
-
             },
             body: JSON.stringify({
                 user_id: userId
@@ -142,32 +254,98 @@ async function assignUserToTask(apiUrl, taskId, users, accessToken) {
 
         document.getElementById('user-select').value = '';
 
-        await fetchTaskUsers(apiUrl, taskId, users);
-        await fetchAllUsers(apiUrl, users);
-
+        await fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken);
+        await fetchAllUsers(apiUrl, users, accessToken);
     } catch (error) {
-        /* console.error(error.message); */
+        console.error(error.message);
+    }
+}
+
+async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
+    try {
+        const response = await fetch(`${apiUrl}/tasks/${taskId}/users/${userId}`, {
+            method: 'DELETE',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al eliminar el usuario de la tarea.');
+        }
+
+        showToast("Se ha eliminado al usuario de la tarea correctamente", "linear-gradient(to right, #00b09b, #96c93d)");
+
+        await fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken);
+        await fetchAllUsers(apiUrl, users, accessToken);
+    } catch (error) {
+        console.error(error.message);
     }
 }
 
 function showToast(message, background) {
     Toastify({
         text: message,
-        duration: 2000,
+        duration: 1500,
         gravity: "top",
-        position: "right",
+        position: "center",
         style: {
             background: background,
         }
     }).showToast();
 }
 
-window.initializeUserFunctions = function (apiUrl, taskId, users, accessToken) {
-    fetchTaskUsers(apiUrl, taskId, users, accessToken);
-    fetchAllUsers(apiUrl, users, accessToken);
+function showConfirm(apiUrl, userId, taskId, users, accessToken) {
+    $.confirm({
+        title: '¿Seguro que quieres eliminar a este usuario de la tarea?',
+        content: 'La acción es irreversible.',
+        type: 'red',
+        boxWidth: '60%',
+        useBootstrap: false,
+        icon: 'fa fa-warning',
+        closeIcon: true,
+        closeIconClass: 'fa fa-close',
+        animateFromElement: false,
+        animation: 'scale',
+        backgroundDismiss: false,
+        backgroundDismissAnimation: 'shake',
+        buttons: {
+            confirm: {
+                text: 'Confirmar',
+                btnClass: 'btn-green',
+                action: async function () {
+                    await deleteUserFromTask(apiUrl, userId, taskId, users, accessToken);
+                }
+            },
+            cancel: {
+                text: 'Cancelar',
+                btnClass: 'btn-red',
+                action: function () {
+
+                }
+            },
+        }
+    });
+}
+
+window.initializeUserAndScoreFunctions = function (apiUrl, taskId, users, accessToken) {
+
+    //Esto es para que fetchAllUsers actúe después de fetchTaskUsersAndScores para poder filtrar los usuarios en el desplegable
+    fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken).then(() => {
+        fetchAllUsers(apiUrl, users, accessToken);
+    });
 
     const assignButton = document.getElementById('assign-user');
     assignButton.addEventListener('click', function () {
         assignUserToTask(apiUrl, taskId, users, accessToken);
     });
 };
+
+const supervisorPanel = document.getElementById("supervisor-panel");
+const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+
+if (userInfo.rol === "participant") {
+    supervisorPanel.classList.add('hidden');
+} else {
+    supervisorPanel.classList.remove('hidden');
+}
