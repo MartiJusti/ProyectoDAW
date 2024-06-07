@@ -30,7 +30,7 @@ document.addEventListener('DOMContentLoaded', function () {
         usersContainer.innerHTML = '';
 
         if (users.length === 0) {
-            usersContainer.innerHTML = '<p>No hay usuarios registrados.</p>';
+            usersContainer.innerHTML = '<span class="text-gray-500">No se ha encontrado ningún usuario.</span>';
         } else {
             const table = document.createElement('table');
             table.className = 'w-full text-left table-compact';

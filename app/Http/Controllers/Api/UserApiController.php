@@ -47,10 +47,10 @@ class UserApiController extends Controller
     {
         $user = User::findOrFail($id);
 
-        if ($request->has('username')) {
+        if ($request->filled('username')) {
             $user->username = $request->input('username');
         }
-        if ($request->has('password')) {
+        if ($request->filled('password')) {
             $user->password = $request->input('password');
         }
 
@@ -64,6 +64,14 @@ class UserApiController extends Controller
      */
     public function destroy(User $user)
     {
-        //
+
+        $user->scores()->delete();
+        $user->tasks()->detach();
+        $user->sentMessages()->delete();
+        $user->receivedMessages()->delete();
+
+        $user->delete();
+
+        return response()->json($user, 204);
     }
 }

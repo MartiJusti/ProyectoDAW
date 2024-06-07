@@ -1,22 +1,68 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const userName = document.getElementById("name");
     const userUsername = document.getElementById("username");
     const userEmail = document.getElementById("email");
     const userBirthday = document.getElementById("birthday");
+    const editLink = document.getElementById("edit-link");
+    const deleteButton = document.getElementById("delete-btn");
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+    const apiUrl = 'http://127.0.0.1:8000/api';
+    const accessToken = localStorage.getItem('accessToken');
 
-    if (userInfo) {
-        userName.textContent = userInfo.name;
-        userUsername.textContent = userInfo.username;
-        userEmail.textContent = userInfo.email;
-        userBirthday.textContent = formatDate(userInfo.birthday);
+    try {
+        const user = await getCurrentUser();
+        userName.textContent = user.name;
+        userUsername.textContent = user.username;
+        userEmail.textContent = user.email;
+        userBirthday.textContent = formatDate(user.birthday);
+
+        deleteButton.addEventListener('click', function () {
+            showConfirm(user.id); // Aquí se pasa el id del usuario como parámetro
+        });
+    } catch (error) {
+        console.error('Error:', error);
+        // Manejar el error aquí, por ejemplo, mostrar un mensaje al usuario
     }
 
-    userName.addEventListener('click', function () {
+    async function getCurrentUser() {
+        try {
+            const response = await fetch(`${apiUrl}/currentUser`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+            });
 
-    });
+            if (!response.ok) {
+                throw new Error('No autorizado');
+            }
 
+            const user = await response.json();
+            return user;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+
+    async function deleteAccount(id) {
+        try {
+            const response = await fetch(`${apiUrl}/users/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                }
+            });
+
+            if (response.ok) {
+                localStorage.removeItem('accessToken');
+                showToast("Cuenta eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
+            }
+        } catch (error) {
+            console.error(`Error inesperado al eliminar usuario: ${error}`);
+        }
+    }
 
     function formatDate(dateString) {
         const localeDate = {
@@ -25,5 +71,53 @@ document.addEventListener('DOMContentLoaded', function () {
             year: 'numeric'
         };
         return new Date(dateString).toLocaleDateString('es-ES', localeDate);
+    }
+
+    function showConfirm(userID) {
+        $.confirm({
+            title: '¿Seguro que quieres borrar tu cuenta?',
+            content: 'La acción es irreversible.',
+            type: 'red',
+            boxWidth: '60%',
+            useBootstrap: false,
+            icon: 'fa fa-warning',
+            closeIcon: true,
+            closeIconClass: 'fa fa-close',
+            animateFromElement: false,
+            animation: 'scale',
+            backgroundDismiss: false,
+            backgroundDismissAnimation: 'shake',
+            buttons: {
+                cancel: {
+                    text: 'Cancelar',
+                    btnClass: 'btn-red',
+                    action: function () {
+                        // Función a ejecutar al cancelar
+                    }
+                },
+                confirm: {
+                    text: 'Confirmar',
+                    btnClass: 'btn-green',
+                    action: async function () {
+                        await deleteAccount(userID);
+                    }
+                },
+            }
+        });
+    }
+
+    function showToast(message, background) {
+        Toastify({
+            text: message,
+            duration: 1500,
+            gravity: "top",
+            position: "center",
+            style: {
+                background: background,
+            },
+            callback: function () {
+                window.location.href = '/';
+            }
+        }).showToast();
     }
 });

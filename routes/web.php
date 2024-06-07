@@ -39,6 +39,9 @@ Route::get('account', function () {
     return view('users.account');
 })->name('users.account');
 
+Route::get('account/edit', [UserController::class, 'accountEdit'])
+    ->name('users.account-edit');
+
 Route::get('/chat/{user}', [MessageController::class, 'showChatWithUser'])->name('chat');
 
 Route::resource('tasks', TaskController::class);

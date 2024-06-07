@@ -17,25 +17,25 @@
                 <div class="rounded-md shadow-sm">
                     <div class="mb-2">
                         <label for="name" class="sr-only">Nombre</label>
-                        <input id="name" name="name" type="text" autocomplete="name" required
+                        <input id="name" name="name" type="text" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Nombre">
                     </div>
                     <div class="mb-2">
                         <label for="username" class="sr-only">Nombre</label>
-                        <input id="username" name="username" type="text" autocomplete="username" required
+                        <input id="username" name="username" type="text" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Usuario">
                     </div>
                     <div class="mb-2">
                         <label for="email" class="sr-only">Correo electrónico</label>
-                        <input id="email" name="email" type="email" autocomplete="email" required
+                        <input id="email" name="email" type="email" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Correo electrónico">
                     </div>
                     <div class="mb-2">
                         <label for="password" class="sr-only">Contraseña</label>
-                        <input id="password" name="password" type="password" autocomplete="new-password" required
+                        <input id="password" name="password" type="password" required
                             class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
                             placeholder="Contraseña">
                     </div>

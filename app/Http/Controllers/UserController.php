@@ -67,4 +67,9 @@ class UserController extends Controller
     {
         return view('users.account');
     }
+
+    public function accountEdit()
+    {
+        return view('users.account-edit');
+    }
 }

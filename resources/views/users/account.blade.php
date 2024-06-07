@@ -26,6 +26,18 @@
                             <span id="birthday" class="w-2/3 text-gray-800 ml-3 text-sm md:text-base"></span>
                         </div>
                     </div>
+
+                    <div class="flex items-end justify-end space-x-2">
+                        <a id="edit-link" href="{{route('users.account-edit')}}"
+                            class="bg-yellow-500 hover:bg-[#d9a507] text-white py-1 px-3 md:py-2 md:px-4 rounded-xl focus:outline-none cursor-pointer">
+                            Editar cuenta
+                        </a>
+                        <button id="delete-btn"
+                            class="bg-red-500 text-white py-1 px-3 md:py-2 md:px-4 rounded-xl hover:bg-red-600 focus:outline-none">
+                            Borrar cuenta
+                        </button>
+                    </div>
+
                 </div>
             </div>
         </div>
