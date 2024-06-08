@@ -2,6 +2,9 @@ import {
     getUserInfo
 } from "../utils/getUserInfo";
 import {
+    showToast
+} from "../utils/showToast";
+import {
     formatDate
 } from "../utils/formatDate";
 
@@ -39,7 +42,7 @@ function displayMessages(messages, chatContainer, authUser, otherUser) {
     }
     messages.reverse().forEach(message => {
         const messageElement = document.createElement('div');
-        messageElement.classList.add('mb-4', 'p-3', 'rounded', 'max-w-sm');
+        messageElement.classList.add('mb-4', 'p-3', 'rounded-2xl', 'max-w-sm');
         if (message.sender_id === authUser.id) {
             messageElement.classList.add('bg-green-100', 'self-end', 'text-right');
             messageElement.innerHTML =
@@ -103,6 +106,8 @@ window.initializeChat = async function (otherUser, accessToken) {
                 fetchMessages(otherUser.id, accessToken, chatContainer, userInfo, otherUser);
             });
             messageInput.value = '';
+        } else {
+            showToast('No puedes enviar un mensaje vacío', "linear-gradient(to right, #DB0202, #750000)");
         }
     });
 };
