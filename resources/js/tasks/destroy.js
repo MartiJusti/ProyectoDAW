@@ -1,3 +1,5 @@
+import { getUserInfo } from "../utils/getUserInfo";
+
 async function deleteTask(apiUrl, taskId, accessToken, userRole) {
     if (userRole === 'participant') {
         showToast('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)');
@@ -22,29 +24,6 @@ async function deleteTask(apiUrl, taskId, accessToken, userRole) {
         console.error(error.message);
     }
 }
-
-async function getUserRole(apiUrl, accessToken) {
-    try {
-        const response = await fetch(`${apiUrl}/currentUser`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al obtener la información del usuario.');
-        }
-
-        const data = await response.json();
-        console.log(data.rol);
-        return data.rol;
-    } catch (error) {
-        console.error(error.message);
-        return null;
-    }
-}
-
 
 function showConfirm(apiUrl, taskId, accessToken, userRole) {
     $.confirm({
@@ -95,12 +74,12 @@ function showToast(message, background) {
 }
 
 window.initializeDeleteTask = async function (apiUrl, taskId, accessToken) {
-    const userRole = await getUserRole(apiUrl, accessToken);
+    const userInfo = await getUserInfo(apiUrl, accessToken);
 
     const deleteButton = document.getElementById('delete-task');
     deleteButton.addEventListener('click', function () {
 
-        showConfirm(apiUrl, taskId, accessToken, userRole);
+        showConfirm(apiUrl, taskId, accessToken, userInfo.rol);
 
     });
 };

@@ -1,3 +1,5 @@
+import { getUserInfo } from "../utils/getUserInfo";
+
 async function fetchAllCategories(apiUrl, taskCategories, accessToken) {
     try {
         const response = await fetch(`${apiUrl}/categories`, {
@@ -102,27 +104,6 @@ async function assignCategoryToTask(apiUrl, accessToken, taskId, categories, use
     }
 }
 
-async function getUserRole(apiUrl, accessToken) {
-    try {
-        const response = await fetch(`${apiUrl}/currentUser`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al obtener la información del usuario.');
-        }
-
-        const data = await response.json();
-        console.log(data.rol);
-        return data.rol;
-    } catch (error) {
-        console.error(error.message);
-        return null;
-    }
-}
 
 function showToast(message, background) {
     Toastify({
@@ -137,13 +118,13 @@ function showToast(message, background) {
 }
 
 window.initializeCategoryFunctions = async function (apiUrl, taskId, categories, accessToken) {
-    const userRole = await getUserRole(apiUrl, accessToken);
+    const userInfo = await getUserInfo(apiUrl, accessToken);
 
     fetchTaskCategories(apiUrl, accessToken, taskId, categories);
     fetchAllCategories(apiUrl, categories, accessToken);
 
     const assignCategoryButton = document.getElementById('assign-category');
     assignCategoryButton.addEventListener('click', function () {
-        assignCategoryToTask(apiUrl, accessToken, taskId, categories, userRole);
+        assignCategoryToTask(apiUrl, accessToken, taskId, categories, userInfo.rol);
     });
 };

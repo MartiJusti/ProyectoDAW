@@ -1,27 +1,6 @@
+import { getUserInfo } from "../utils/getUserInfo";
+
 const apiUrl = 'http://127.0.0.1:8000/api';
-
-async function getUserInfo(apiUrl, accessToken) {
-    try {
-        const response = await fetch(`${apiUrl}/currentUser`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al obtener la información del usuario.');
-        }
-
-        const data = await response.json();
-        return data;
-    } catch (error) {
-        console.error(error.message);
-        return null;
-    }
-}
-
-
 
 function fetchMessages(otherUserId, accessToken, chatContainer, authUser, otherUser) {
 
@@ -40,7 +19,7 @@ function fetchMessages(otherUserId, accessToken, chatContainer, authUser, otherU
             displayMessages(messages, chatContainer, authUser, otherUser);
         })
         .catch(error => {
-            /* console.error(error); */
+            console.error(error);
         });
 }
 
@@ -95,7 +74,7 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
             callback();
         })
         .catch(error => {
-            /* console.error(error); */
+            console.error(error);
         });
 }
 

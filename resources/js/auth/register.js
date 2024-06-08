@@ -1,47 +1,27 @@
+import { getUserInfo } from "../utils/getUserInfo";
+
 document.addEventListener('DOMContentLoaded', async function () {
 
     const accessToken = localStorage.getItem('accessToken');
     const apiUrl = 'http://127.0.0.1:8000/api';
 
-    async function getUserRole(apiUrl, accessToken) {
-        try {
-            const response = await fetch(`${apiUrl}/currentUser`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al obtener la información del usuario.');
-            }
-
-            const data = await response.json();
-            console.log(data.rol);
-            return data.rol;
-        } catch (error) {
-            console.error(error.message);
-            return null;
-        }
-    }
-
-    const userRole = await getUserRole(apiUrl, accessToken);
+    const userInfo = await getUserInfo(apiUrl, accessToken);
 
     const registerForm = document.getElementById('register-form');
     const registerTitle = document.getElementById('register-title');
     const registerButton = document.getElementById('register-button');
     const rolSelect = document.getElementById('rol-select');
 
-    if (accessToken && userRole.toLowerCase() !== 'admin') {
+    if (accessToken && userInfo.rol.toLowerCase() !== 'admin') {
         window.location.href = "/";
     }
 
-    if (accessToken && userRole.toLowerCase() === 'admin') {
+    if (accessToken && userInfo.rol.toLowerCase() === 'admin') {
         registerTitle.textContent = 'Crear cuenta';
         registerButton.textContent = 'Crear cuenta';
     }
 
-    if (!accessToken || userRole.toLowerCase() !== 'admin') {
+    if (!accessToken || userInfo.rol.toLowerCase() !== 'admin') {
         rolSelect.classList.add('hidden');
     }
 
@@ -65,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 registerForm.reset();
             })
             .catch(error => {
-                /* console.error(error.message); */
+                console.error(error.message);
 
             });
     });

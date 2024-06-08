@@ -1,24 +1,4 @@
-async function getUserRole(apiUrl, accessToken) {
-    try {
-        const response = await fetch(`${apiUrl}/currentUser`, {
-            method: 'GET',
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        });
-
-        if (!response.ok) {
-            throw new Error('Error al obtener la información del usuario.');
-        }
-
-        const data = await response.json();
-        console.log(data.rol);
-        return data.rol;
-    } catch (error) {
-        console.error(error.message);
-        return null;
-    }
-}
+import { getUserInfo } from "../utils/getUserInfo";
 
 const scoreState = {};
 
@@ -317,7 +297,7 @@ async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
 }
 
 window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, accessToken) {
-    const userRole = await getUserRole(apiUrl, accessToken);
+    const userInfo = await getUserInfo(apiUrl, accessToken);
 
     const categoriesDiv = document.getElementById('categories');
     const usersDiv = document.getElementById('users');
@@ -326,7 +306,7 @@ window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, 
     const scores = document.getElementById('scores');
     const mainContainer = document.getElementById('main-container');
 
-    if (userRole.toLocaleLowerCase() === 'participant') {
+    if (userInfo.rol.toLocaleLowerCase() === 'participant') {
         categoriesDiv.classList.add('hidden');
         usersDiv.classList.add('hidden');
         supervisorPanel.classList.add('hidden');
@@ -357,13 +337,13 @@ window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, 
     }
 
     //Esto es para que fetchAllUsers actúe después de fetchTaskUsersAndScores para poder filtrar los usuarios en el desplegable
-    fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userRole).then(() => {
+    fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userInfo.rol).then(() => {
         fetchAllUsers(apiUrl, users, accessToken);
     });
 
     const assignButton = document.getElementById('assign-user');
     assignButton.addEventListener('click', function () {
-        assignUserToTask(apiUrl, taskId, users, accessToken, userRole);
+        assignUserToTask(apiUrl, taskId, users, accessToken, userInfo.rol);
     });
 };
 

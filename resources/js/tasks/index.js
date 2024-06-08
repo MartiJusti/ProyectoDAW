@@ -1,3 +1,7 @@
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+
 document.addEventListener('DOMContentLoaded', async function () {
     const taskList = document.getElementById('task-list');
     const searchInput = document.getElementById('search');
@@ -7,27 +11,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     let tasks = [];
 
-    async function getUserInfo(apiUrl, accessToken) {
-        try {
-            const response = await fetch(`${apiUrl}/currentUser`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al obtener la información del usuario.');
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error(error.message);
-            return null;
-        }
-    }
-
     const userInfo = await getUserInfo(apiUrl, accessToken);
     console.log(userInfo.rol);
     console.log(userInfo.id);
@@ -35,23 +18,23 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (userInfo.rol === "admin") {
         fetch(`${apiUrl}/tasks`, {
-            headers: {
-                'Authorization': `Bearer ${accessToken}`
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Error al obtener las tareas');
-            }
-            return response.json();
-        })
-        .then(data => {
-            tasks = data;
-            displayTasks(tasks);
-        })
-        .catch(error => {
-            /* console.error(error); */
-        });
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al obtener las tareas');
+                }
+                return response.json();
+            })
+            .then(data => {
+                tasks = data;
+                displayTasks(tasks);
+            })
+            .catch(error => {
+                console.error(error);
+            });
     } else {
         fetch(`${apiUrl}/users/${userInfo.id}/tasks`, {
                 headers: {
@@ -69,7 +52,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 displayTasks(tasks);
             })
             .catch(error => {
-                /* console.error(error); */
+                console.error(error);
             });
     }
 

@@ -1,28 +1,12 @@
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+
 document.addEventListener('DOMContentLoaded', async function () {
     const usersList = document.getElementById('users-list');
     const accessToken = localStorage.getItem('accessToken');
     const apiUrl = 'http://127.0.0.1:8000/api';
 
-    async function getUserInfo(apiUrl, accessToken) {
-        try {
-            const response = await fetch(`${apiUrl}/currentUser`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al obtener la información del usuario.');
-            }
-
-            const data = await response.json();
-            return data;
-        } catch (error) {
-            console.error(error.message);
-            return null;
-        }
-    }
 
     const userInfo = await getUserInfo(apiUrl, accessToken);
     console.log(userInfo.rol);
@@ -60,6 +44,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         })
         .catch(error => {
-            /* console.error(error); */
+            console.error(error);
         });
 });

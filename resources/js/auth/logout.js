@@ -1,30 +1,10 @@
+import { getUserInfo } from "../utils/getUserInfo";
+
 document.addEventListener('DOMContentLoaded', async function () {
     const accessToken = localStorage.getItem('accessToken');
     const apiUrl = 'http://127.0.0.1:8000/api';
 
-    async function getUserRole(apiUrl, accessToken) {
-        try {
-            const response = await fetch(`${apiUrl}/currentUser`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error('Error al obtener la información del usuario.');
-            }
-
-            const data = await response.json();
-            console.log(data.rol);
-            return data.rol;
-        } catch (error) {
-            console.error(error.message);
-            return null;
-        }
-    }
-
-    const userRole = await getUserRole(apiUrl, accessToken);
+    const userInfo = await getUserInfo(apiUrl, accessToken);
 
     const registerLink = document.getElementById('register-link');
     const loginLink = document.getElementById('login-link');
@@ -36,19 +16,19 @@ document.addEventListener('DOMContentLoaded', async function () {
     const calendarLink = document.getElementById('calendar-link');
     const usersLink = document.getElementById('users-link');
 
-    if (accessToken && userRole.toLocaleLowerCase() == 'admin') {
+    if (accessToken && userInfo.rol.toLocaleLowerCase() === 'admin') {
         usersLink.classList.remove('hidden');
     } else {
         usersLink.classList.add('hidden');
     }
 
-    if (accessToken && userRole.toLocaleLowerCase() == 'participant') {
+    if (accessToken && userInfo.rol.toLocaleLowerCase() === 'participant') {
         taskCreateLink.classList.add('hidden');
     } else {
         taskCreateLink.classList.remove('hidden');
     }
 
-    if (!accessToken || userRole.toLocaleLowerCase() == 'admin') {
+    if (!accessToken || userInfo.rol.toLocaleLowerCase() === 'admin') {
         registerLink.classList.remove('hidden');
     } else {
         registerLink.classList.add('hidden');
@@ -86,7 +66,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     window.location.href = "/login";
                 })
                 .catch(error => {
-                    /* console.error(error); */
+                    console.error(error);
                 });
         });
     }
