@@ -1,3 +1,7 @@
+import {
+    showToastWithCallback
+} from "../utils/showToastWithCallback";
+
 document.addEventListener('DOMContentLoaded', async function () {
     const usernameInput = document.getElementById('username');
 
@@ -72,28 +76,12 @@ document.addEventListener('DOMContentLoaded', async function () {
             const data = await response.json();
 
             if (data) {
-                showToast("Usuario editado con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
+                showToastWithCallback("Usuario editado con éxito", "linear-gradient(to right, #00b09b, #96c93d)", () => {
+                    window.location.href = '/account';
+                });
             }
         } catch (error) {
             console.error(error.message);
         }
     }
 });
-
-
-
-function showToast(message, background) {
-    Toastify({
-        text: message,
-        duration: 1500,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        },
-        callback: function () {
-            window.location.href = '/account';
-
-        }
-    }).showToast();
-}

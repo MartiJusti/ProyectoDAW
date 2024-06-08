@@ -1,3 +1,5 @@
+import { showToastWithCallback } from "../utils/showToastWithCallback";
+
 document.addEventListener('DOMContentLoaded', async function () {
     const userName = document.getElementById("name");
     const userUsername = document.getElementById("username");
@@ -57,7 +59,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             if (response.ok) {
                 localStorage.removeItem('accessToken');
-                showToast("Cuenta eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
+                showToastWithCallback("Cuenta eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)", () => {
+                    window.location.href = '/';
+                });
             }
         } catch (error) {
             console.error(`Error inesperado al eliminar usuario: ${error}`);
@@ -92,7 +96,6 @@ document.addEventListener('DOMContentLoaded', async function () {
                     text: 'Cancelar',
                     btnClass: 'btn-red',
                     action: function () {
-                        // Función a ejecutar al cancelar
                     }
                 },
                 confirm: {
@@ -104,20 +107,5 @@ document.addEventListener('DOMContentLoaded', async function () {
                 },
             }
         });
-    }
-
-    function showToast(message, background) {
-        Toastify({
-            text: message,
-            duration: 1500,
-            gravity: "top",
-            position: "center",
-            style: {
-                background: background,
-            },
-            callback: function () {
-                window.location.href = '/';
-            }
-        }).showToast();
     }
 });

@@ -1,4 +1,9 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    showToast
+} from "../utils/showToast";
 
 const scoreState = {};
 
@@ -347,19 +352,6 @@ window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, 
     });
 };
 
-
-function showToast(message, background) {
-    Toastify({
-        text: message,
-        duration: 1500,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        }
-    }).showToast();
-}
-
 function showConfirm(apiUrl, userId, taskId, users, accessToken) {
     $.confirm({
         title: '¿Seguro que quieres eliminar a este usuario de la tarea?',
@@ -375,18 +367,18 @@ function showConfirm(apiUrl, userId, taskId, users, accessToken) {
         backgroundDismiss: false,
         backgroundDismissAnimation: 'shake',
         buttons: {
-            confirm: {
-                text: 'Confirmar',
-                btnClass: 'btn-green',
-                action: async function () {
-                    await deleteUserFromTask(apiUrl, userId, taskId, users, accessToken);
-                }
-            },
             cancel: {
                 text: 'Cancelar',
                 btnClass: 'btn-red',
                 action: function () {
 
+                }
+            },
+            confirm: {
+                text: 'Confirmar',
+                btnClass: 'btn-green',
+                action: async function () {
+                    await deleteUserFromTask(apiUrl, userId, taskId, users, accessToken);
                 }
             },
         }

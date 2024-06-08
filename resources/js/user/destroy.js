@@ -1,3 +1,7 @@
+import {
+    showToastWithCallback
+} from "../utils/showToastWithCallback";
+
 async function deleteUser(apiUrl, userId, accessToken) {
     try {
         const response = await fetch(`${apiUrl}/users/${userId}`, {
@@ -8,7 +12,9 @@ async function deleteUser(apiUrl, userId, accessToken) {
         });
 
         if (response.status === 204) {
-            showToast("Usuario eliminado con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
+            showToastWithCallback("Usuario eliminado con éxito", "linear-gradient(to right, #00b09b, #96c93d)", () => {
+                window.location.href = '/users';
+            });
         } else {
             const data = await response.json();
             throw new Error(data.error || 'Error al borrar.');
@@ -34,13 +40,6 @@ function showConfirm(apiUrl, userId, accessToken) {
         backgroundDismiss: false,
         backgroundDismissAnimation: 'shake',
         buttons: {
-            confirm: {
-                text: 'Confirmar',
-                btnClass: 'btn-green',
-                action: async function () {
-                    await deleteUser(apiUrl, userId, accessToken);
-                }
-            },
             cancel: {
                 text: 'Cancelar',
                 btnClass: 'btn-red',
@@ -48,23 +47,15 @@ function showConfirm(apiUrl, userId, accessToken) {
 
                 }
             },
+            confirm: {
+                text: 'Confirmar',
+                btnClass: 'btn-green',
+                action: async function () {
+                    await deleteUser(apiUrl, userId, accessToken);
+                }
+            },
         }
     });
-}
-
-function showToast(message, background) {
-    Toastify({
-        text: message,
-        duration: 1500,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        },
-        callback: function () {
-            window.location.href = '/users';
-        }
-    }).showToast();
 }
 
 window.initializeDeleteUser = function (apiUrl, userId, accessToken) {

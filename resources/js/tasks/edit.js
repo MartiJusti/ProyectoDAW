@@ -1,11 +1,21 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    showToastWithCallback
+} from "../utils/showToastWithCallback";
+import {
+    showToastWithCallbackAndId
+} from "../utils/showToastWithCallbackAndId";
 
 const apiUrl = 'http://127.0.0.1:8000/api';
 
 async function editTask(taskId, accessToken, userRole) {
     if (userRole === 'participant') {
-        showToast('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)');
-        window.location.href = '/account';
+        showToastWithCallback('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)', () => {
+            window.location.href = '/';
+        });
+
         return;
     }
 
@@ -34,29 +44,13 @@ async function editTask(taskId, accessToken, userRole) {
             const data = await response.json();
 
             if (data) {
-                showToast("Tarea editada con éxito", "linear-gradient(to right, #00b09b, #96c93d)", data.id);
+                showToastWithCallbackAndId("Tarea editada con éxito", "linear-gradient(to right, #00b09b, #96c93d)", "tasks", data.id);
             }
 
         } catch (error) {
             console.error(error.message);
         }
     });
-}
-
-function showToast(message, background, taskId) {
-    Toastify({
-        text: message,
-        duration: 1250,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        },
-        callback: function () {
-            window.location.href = `/tasks/${taskId}`;
-        }
-    }).showToast();
-
 }
 
 window.initializeEditTask = async function (taskId, accessToken) {

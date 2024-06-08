@@ -1,8 +1,15 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    showToastWithCallback
+} from "../utils/showToastWithCallback";
 
 async function deleteTask(apiUrl, taskId, accessToken, userRole) {
     if (userRole === 'participant') {
-        showToast('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)');
+        showToastWithCallback('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)', () => {
+            window.location.href = '/tasks';
+        });
         return;
     }
 
@@ -15,7 +22,9 @@ async function deleteTask(apiUrl, taskId, accessToken, userRole) {
         });
 
         if (response.status === 204) {
-            showToast("Tarea eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)");
+            showToastWithCallback("Tarea eliminada con éxito", "linear-gradient(to right, #00b09b, #96c93d)", () => {
+                window.location.href = '/tasks';
+            });
         } else {
             const data = await response.json();
             throw new Error(data.error || 'Error al borrar.');
@@ -40,13 +49,6 @@ function showConfirm(apiUrl, taskId, accessToken, userRole) {
         backgroundDismiss: false,
         backgroundDismissAnimation: 'shake',
         buttons: {
-            confirm: {
-                text: 'Confirmar',
-                btnClass: 'btn-green',
-                action: async function () {
-                    await deleteTask(apiUrl, taskId, accessToken, userRole);
-                }
-            },
             cancel: {
                 text: 'Cancelar',
                 btnClass: 'btn-red',
@@ -54,23 +56,15 @@ function showConfirm(apiUrl, taskId, accessToken, userRole) {
 
                 }
             },
+            confirm: {
+                text: 'Confirmar',
+                btnClass: 'btn-green',
+                action: async function () {
+                    await deleteTask(apiUrl, taskId, accessToken, userRole);
+                }
+            },
         }
     });
-}
-
-function showToast(message, background) {
-    Toastify({
-        text: message,
-        duration: 1500,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        },
-        callback: function () {
-            window.location.href = '/tasks';
-        }
-    }).showToast();
 }
 
 window.initializeDeleteTask = async function (apiUrl, taskId, accessToken) {

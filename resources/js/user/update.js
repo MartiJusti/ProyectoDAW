@@ -1,3 +1,7 @@
+import {
+    showToastWithCallbackAndId
+} from "../utils/showToastWithCallbackAndId";
+
 async function editUser(userId, accessToken) {
     const userForm = document.getElementById('edit-user-form');
     const apiUrl = 'http://127.0.0.1:8000/api';
@@ -25,29 +29,13 @@ async function editUser(userId, accessToken) {
             const data = await response.json();
 
             if (data) {
-                showToast("Usuario editado con éxito", "linear-gradient(to right, #00b09b, #96c93d)", data.id);
+                showToastWithCallbackAndId("Usuario editado con éxito", "linear-gradient(to right, #00b09b, #96c93d)", "users", data.id);
             }
 
         } catch (error) {
             console.error(error.message);
         }
     });
-}
-
-function showToast(message, background, userId) {
-    Toastify({
-        text: message,
-        duration: 1250,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        },
-        callback: function () {
-            window.location.href = `/users/${userId}`;
-        }
-    }).showToast();
-
 }
 
 window.intializeEditUser = function(userId, accessToken) {

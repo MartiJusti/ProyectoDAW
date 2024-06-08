@@ -1,4 +1,9 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    showToast
+} from "../utils/showToast";
 
 async function fetchAllCategories(apiUrl, taskCategories, accessToken) {
     try {
@@ -102,19 +107,6 @@ async function assignCategoryToTask(apiUrl, accessToken, taskId, categories, use
     } catch (error) {
         console.error(error.message);
     }
-}
-
-
-function showToast(message, background) {
-    Toastify({
-        text: message,
-        duration: 1250,
-        gravity: "top",
-        position: "center",
-        style: {
-            background: background,
-        }
-    }).showToast();
 }
 
 window.initializeCategoryFunctions = async function (apiUrl, taskId, categories, accessToken) {
