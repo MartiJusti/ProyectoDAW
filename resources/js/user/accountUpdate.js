@@ -4,6 +4,10 @@ import {
 import {
     showToastWithCallback
 } from "../utils/showToastWithCallback";
+import {
+    displayErrors,
+    clearErrors
+} from '../utils/errorHandling.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
     const usernameInput = document.getElementById('username');
@@ -18,6 +22,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         const editForm = document.getElementById('edit-account-form');
         editForm.addEventListener('submit', async function (e) {
             e.preventDefault();
+            clearErrors();
 
             const formData = new FormData(editForm);
             const userData = {};
@@ -49,12 +54,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(userData)
             });
 
             const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(JSON.stringify(data));
+            }
 
             if (data) {
                 showToastWithCallback("Usuario editado con éxito", "linear-gradient(to right, #00b09b, #96c93d)", () => {
@@ -62,7 +72,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
             }
         } catch (error) {
-            console.error(error.message);
+            try {
+                const errorData = JSON.parse(error.message);
+                displayErrors(errorData.errors);
+            } catch (e) {
+                console.error('Error:', error.message);
+            }
         }
     }
 });

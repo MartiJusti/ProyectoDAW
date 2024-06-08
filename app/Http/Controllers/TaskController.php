@@ -60,6 +60,5 @@ class TaskController extends Controller
      */
     public function destroy(Task $task)
     {
-        return view('task.destroy', compact('task'));
     }
 }

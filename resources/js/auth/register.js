@@ -1,4 +1,10 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    displayErrors,
+    clearErrors
+} from '../utils/errorHandling.js';
 
 document.addEventListener('DOMContentLoaded', async function () {
 
@@ -33,16 +39,28 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     registerForm.addEventListener('submit', function (e) {
         e.preventDefault();
+        clearErrors();
+
         const formData = new FormData(registerForm);
 
         fetch(`${apiUrl}/register`, {
                 method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                },
                 body: formData
             })
-            .then(response => {
+            .then(async response => {
                 if (!response.ok) {
-                    throw new Error(
-                        'Usuario no autorizado. Por favor, verifique sus credenciales.');
+                    let errorData;
+
+                    try {
+                        errorData = await response.json();
+                    } catch (e) {
+                        const errorText = await response.text();
+                        throw new Error(errorText);
+                    }
+                    throw new Error(JSON.stringify(errorData));
                 }
                 return response.json();
             })
@@ -51,7 +69,12 @@ document.addEventListener('DOMContentLoaded', async function () {
                 registerForm.reset();
             })
             .catch(error => {
-                console.error(error.message);
+                try {
+                    const errorData = JSON.parse(error.message);
+                    displayErrors(errorData.errors);
+                } catch (e) {
+                    console.error('Error:', error.message);
+                }
 
             });
     });

@@ -22,17 +22,17 @@ class TaskRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => 'required|string|max:255',
-            'description' => 'required|string|max:1000',
-            'date_start' => 'required|date',
+            'name' => 'required|string|min:3|max:255',
+            'description' => 'required|string|min:3|max:1000',
+            'date_start' => 'required|date|before_or_equal:date_end',
             'date_end' => 'required|date|after_or_equal:date_start',
         ];
 
         if ($this->isMethod('patch') || $this->isMethod('put')) {
             $rules = [
-                'name' => 'sometimes|required|string|max:255',
-                'description' => 'sometimes|required|string|max:1000',
-                'date_start' => 'sometimes|required|date',
+                'name' => 'sometimes|required|string|min:3|max:255',
+                'description' => 'sometimes|required|string|min:3|max:1000',
+                'date_start' => 'sometimes|required|date|before_or_equal:date_end',
                 'date_end' => 'sometimes|required|date|after_or_equal:date_start',
             ];
         }
@@ -46,18 +46,21 @@ class TaskRequest extends FormRequest
         return [
             'name.required' => 'El nombre es obligatorio.',
             'name.string' => 'El nombre debe ser una cadena de texto.',
-            'name.max' => 'El nombre no debe exceder los 255 caracteres.',
+            'name.min' => 'El nombre debe tener al menos 3 carácteres.',
+            'name.max' => 'El nombre no debe exceder los 255 carácteres.',
 
             'description.required' => 'La descripción es obligatoria.',
             'description.string' => 'La descripción debe ser una cadena de texto.',
-            'description.max' => 'La descripción no debe exceder los 1000 caracteres.',
+            'description.min' => 'El nombre debe tener al menos 3 carácteres.',
+            'description.max' => 'La descripción no debe exceder los 1000 carácteres.',
 
             'date_start.required' => 'La fecha de inicio es obligatoria.',
             'date_start.date' => 'La fecha de inicio debe ser una fecha válida.',
+            'date_start.before_or_equal' => 'La fecha de inicio no puede ser posterior a la fecha de fin.',
 
             'date_end.required' => 'La fecha de fin es obligatoria.',
             'date_end.date' => 'La fecha de fin debe ser una fecha válida.',
-            'date_end.after_or_equal' => 'La fecha de fin debe ser igual o posterior a la fecha de inicio.',
+            'date_end.after_or_equal' => 'La fecha de fin no puede ser anterior a la fecha de inicio.',
         ];
     }
 }

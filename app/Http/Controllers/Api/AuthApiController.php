@@ -2,22 +2,15 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class AuthApiController extends Controller
 {
-    public function register(Request $request)
+    public function register(AuthRequest $request)
     {
-        $request->validate([
-            'username' => 'required',
-            'name' => 'required',
-            'email' => 'required|email',
-            'password' => 'required|min:6',
-            'birthday' => 'date|before:today',
-            'role' => 'in:supervisor,participant,admin'
-        ]);
 
         $user = User::create([
             'username' => $request->username,
@@ -31,6 +24,8 @@ class AuthApiController extends Controller
         return response()->json($user);
     }
 
+    /* La función de login no usa el AuthRequest
+    porque el usuario conoce sus datos */
     public function login(Request $request)
     {
         $request->validate([

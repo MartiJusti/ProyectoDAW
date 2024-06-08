@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\AccountRequest;
+use App\Http\Requests\AuthRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -43,7 +45,7 @@ class UserApiController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(AccountRequest $request, $id)
     {
         $user = User::findOrFail($id);
 

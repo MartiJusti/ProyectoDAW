@@ -7,6 +7,10 @@ import {
 import {
     showToastWithCallbackAndId
 } from "../utils/showToastWithCallbackAndId";
+import {
+    displayErrors,
+    clearErrors
+} from '../utils/errorHandling.js';
 
 const apiUrl = 'http://127.0.0.1:8000/api';
 
@@ -23,6 +27,7 @@ async function editTask(taskId, accessToken, userRole) {
 
     taskForm.addEventListener('submit', async function (e) {
         e.preventDefault();
+        clearErrors();
 
         const formData = new FormData(taskForm);
         const jsonData = {};
@@ -36,19 +41,28 @@ async function editTask(taskId, accessToken, userRole) {
                 method: 'PATCH',
                 headers: {
                     'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify(jsonData)
             });
 
             const data = await response.json();
 
-            if (data) {
-                showToastWithCallbackAndId("Tarea editada con éxito", "linear-gradient(to right, #00b09b, #96c93d)", "tasks", data.id);
+            if (!response.ok) {
+                throw new Error(JSON.stringify(data));
             }
 
+            showToastWithCallbackAndId("Tarea editada con éxito", "linear-gradient(to right, #00b09b, #96c93d)", "tasks", data.id);
+
+
         } catch (error) {
-            console.error(error.message);
+            try {
+                const errorData = JSON.parse(error.message);
+                displayErrors(errorData.errors);
+            } catch (e) {
+                console.error('Error:', error.message);
+            }
         }
     });
 }
