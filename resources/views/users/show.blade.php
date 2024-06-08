@@ -28,6 +28,17 @@
                                 class="w-2/3 text-gray-800 ml-3 text-sm md:text-base">{{ \Carbon\Carbon::parse($user->birthday)->format('d/m/Y') }}</span>
                         </div>
                     </div>
+
+                    <div class="flex items-end justify-end space-x-2">
+                        <a id="edit-link" href="{{ route('users.edit', $user->id) }}"
+                            class="bg-yellow-500 hover:bg-[#d9a507] text-white py-1 px-3 md:py-2 md:px-4 rounded-xl focus:outline-none cursor-pointer">
+                            Editar usuario
+                        </a>
+                        <button id="delete-btn"
+                            class="bg-red-500 text-white py-1 px-3 md:py-2 md:px-4 rounded-xl hover:bg-red-600 focus:outline-none">
+                            Borrar usuario
+                        </button>
+                    </div>
                 </div>
                 <div class="bg-gray-100 p-4 rounded-lg">
                     @if ($user->tasks->isEmpty())
@@ -69,5 +80,16 @@
 @endsection
 
 @section('scripts')
-    {{-- @vite('resources/js/user/show.js') --}}
+    @vite(['resources/js/user/show.js', 'resources/js/user/destroy.js'])
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+
+            const accessToken = localStorage.getItem('accessToken');
+            const userId = @json($user->id);
+            const apiUrl = 'http://127.0.0.1:8000/api';
+
+            initializeDeleteUser(apiUrl, userId, accessToken);
+
+        });
+    </script>
 @endsection

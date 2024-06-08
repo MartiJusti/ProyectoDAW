@@ -6,3 +6,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* #sidebar {
+
+    background-image: linear-gradient(rgb(176, 255, 255), rgb(221, 251, 251) 50%, white);
+  } */
+
+/*
+  #login-form
+
+#register-form
+
+#calendar
+
+#chat-container
+
+#users-list
+
+#task-form
+
+#task-edit-form
+
+#task-list
+
+#task-info
+
+#categories-select
+
+#users-select
+
+#edit-account-form
+
+#account-info
+
+#users-container */

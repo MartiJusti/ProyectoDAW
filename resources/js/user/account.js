@@ -17,11 +17,11 @@ document.addEventListener('DOMContentLoaded', async function () {
         userBirthday.textContent = formatDate(user.birthday);
 
         deleteButton.addEventListener('click', function () {
-            showConfirm(user.id); // Aquí se pasa el id del usuario como parámetro
+            showConfirm(user.id);
         });
     } catch (error) {
         console.error('Error:', error);
-        // Manejar el error aquí, por ejemplo, mostrar un mensaje al usuario
+
     }
 
     async function getCurrentUser() {

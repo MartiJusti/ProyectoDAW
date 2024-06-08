@@ -6,9 +6,9 @@
     <div class="max-w-2xl mx-auto mt-10">
         <h2 class="text-3xl font-bold mb-6 text-center">Editar Tarea</h2>
         <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
-            <form id="task-form" method="POST">
+            <form id="task-form">
                 @csrf
-                @method('PATCH')
+
                 <div class="mb-4">
                     <label for="name" class="block text-gray-700 text-sm font-bold mb-2">Nombre</label>
                     <input type="text" name="name" id="name" value="{{ $task->name }}"

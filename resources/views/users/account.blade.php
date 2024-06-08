@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mx-auto py-8 px-4">
-        <div class="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden">
+        <div id="account-info" class="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden">
             <div class="p-6 space-y-6 md:space-y-10">
                 <div class="flex flex-col space-y-6 md:space-y-14">
                     <div>

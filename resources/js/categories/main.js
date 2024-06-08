@@ -61,7 +61,12 @@ async function fetchTaskCategories(apiUrl, accessToken, taskId, categories) {
     }
 }
 
-async function assignCategoryToTask(apiUrl, accessToken, taskId, categories) {
+async function assignCategoryToTask(apiUrl, accessToken, taskId, categories, userRole) {
+    if (userRole === 'participant') {
+        showToast('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)');
+        return;
+    }
+
     const categoryId = document.getElementById('category-select').value;
 
     if (!categoryId) {
@@ -97,6 +102,28 @@ async function assignCategoryToTask(apiUrl, accessToken, taskId, categories) {
     }
 }
 
+async function getUserRole(apiUrl, accessToken) {
+    try {
+        const response = await fetch(`${apiUrl}/currentUser`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener la información del usuario.');
+        }
+
+        const data = await response.json();
+        console.log(data.rol);
+        return data.rol;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
 function showToast(message, background) {
     Toastify({
         text: message,
@@ -109,12 +136,14 @@ function showToast(message, background) {
     }).showToast();
 }
 
-window.initializeCategoryFunctions = function (apiUrl, taskId, categories, accessToken) {
+window.initializeCategoryFunctions = async function (apiUrl, taskId, categories, accessToken) {
+    const userRole = await getUserRole(apiUrl, accessToken);
+
     fetchTaskCategories(apiUrl, accessToken, taskId, categories);
     fetchAllCategories(apiUrl, categories, accessToken);
 
     const assignCategoryButton = document.getElementById('assign-category');
     assignCategoryButton.addEventListener('click', function () {
-        assignCategoryToTask(apiUrl, accessToken, taskId, categories);
+        assignCategoryToTask(apiUrl, accessToken, taskId, categories, userRole);
     });
 };

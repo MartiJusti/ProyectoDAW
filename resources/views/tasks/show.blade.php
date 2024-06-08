@@ -9,20 +9,23 @@
 @section('content')
     <div class="p-4 space-y-4 mt-6 flex flex-col items-center">
 
-        <div class="flex flex-wrap justify-center items-stretch w-full md:gap-8">
+        <div id="main-container" class="flex flex-wrap justify-center items-stretch w-full md:gap-8">
             <div id="task-info"
                 class="w-full md:w-2/5 mb-4 p-4 bg-gray-200 rounded shadow-md flex flex-col items-center justify-center space-y-5 order-1">
                 <span class="font-bold text-lg md:text-3xl">{{ $task->name }}</span>
-                <span class="text-sm md:text-xl">{{ $task->description }}</span>
+                <span class="text-sm md:text-lg">{{ $task->description }}</span>
                 <span id="category-list" class="text-xs md:text-sm">
                 </span>
             </div>
 
             <div id="scores" class="w-full md:w-2/5 mb-4 p-4 rounded shadow-md order-3 md:order-2">
-                <div id="task-users" class="rounded shadow-md"></div>
+                <div id="task-users" class="rounded shadow-md">
+                    <div id="loading-message" class="hidden text-center text-gray-500">Cargando...</div>
+                </div>
             </div>
 
-            <div id="categories" class="w-full md:w-2/5 mb-4 bg-pink-200 rounded-md p-4 flex flex-col justify-between order-2 md:order-3">
+            <div id="categories"
+                class="w-full md:w-2/5 mb-4 bg-pink-200 rounded-md p-4 flex flex-col justify-between order-2 md:order-3 hidden">
                 <label for="category-select" class="block text-gray-700 text-sm font-bold mb-2">
                     Asignar nueva categoría:
                 </label>
@@ -41,7 +44,8 @@
                 </button>
             </div>
 
-            <div id="users" class="w-full md:w-2/5 mb-4 bg-green-200 rounded-md p-4 flex flex-col justify-between order-4">
+            <div id="users"
+                class="w-full md:w-2/5 mb-4 bg-green-200 rounded-md p-4 flex flex-col justify-between order-4 hidden">
                 <label for="user-select" class="block text-gray-700 text-sm font-bold mb-2">
                     Asignar nuevo usuario:
                 </label>
@@ -54,14 +58,13 @@
                         <i class="fa-solid fa-angle-down"></i>
                     </div>
                 </div>
-                <button id="assign-user"
-                    class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-2 rounded">
+                <button id="assign-user" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 mt-2 rounded">
                     Asignar Usuario
                 </button>
             </div>
         </div>
 
-        <div id="supervisor-panel" class="space-y-4 w-full">
+        <div id="supervisor-panel" class="space-y-4 w-full hidden">
             <div class="flex justify-center space-x-4 mb-4 w-full">
                 <button class="bg-yellow-500 hover:bg-[#d9a507] text-white font-bold py-2 px-4 rounded-2xl">
                     <a href="{{ route('tasks.edit', $task->id) }}">Editar Tarea</a>
@@ -88,13 +91,10 @@
             const taskId = @json($task->id);
             let users = [];
             let categories = [];
-
             const apiUrl = 'http://127.0.0.1:8000/api';
 
             initializeDeleteTask(apiUrl, taskId, accessToken);
-
             initializeCategoryFunctions(apiUrl, taskId, categories, accessToken);
-
             initializeUserAndScoreFunctions(apiUrl, taskId, users, accessToken);
 
         });

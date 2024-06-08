@@ -1,16 +1,29 @@
-const supervisorPanel = document.getElementById("supervisor-panel");
-const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-console.log(userInfo.rol);
+async function getUserRole(apiUrl, accessToken) {
+    try {
+        const response = await fetch(`${apiUrl}/currentUser`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
 
-if (userInfo.rol.toLocaleLowerCase() === "participant") {
-    supervisorPanel.classList.add('hidden');
-} else {
-    supervisorPanel.classList.remove('hidden');
+        if (!response.ok) {
+            throw new Error('Error al obtener la información del usuario.');
+        }
+
+        const data = await response.json();
+        console.log(data.rol);
+        return data.rol;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
 }
 
 const scoreState = {};
 
-async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken) {
+async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userRole) {
+
     try {
         const usersResponse = await fetch(`${apiUrl}/tasks/${taskId}/users`, {
             method: 'GET',
@@ -102,14 +115,14 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken) {
                     <td class="px-4 py-2 border border-gray-400 text-center font-bold">${user.username}</td>
                     <td class="px-4 py-2 border border-gray-400 text-center font-bold">
                         <span id="points-${user.id}">${user.points}</span>
-                        <input type="number" id="points-input-${user.id}" value="${user.points}" class="hidden w-1/2 md:w-1/4" />
+                        <input type="number" id="points-input-${user.id}" value="${user.points}" class="hidden w-8 md:w-1/4" />
                     </td>
-                    ${userInfo.rol !== 'participant' ? `
-                        <td id="buttons-${user.id}" class="px-4 py-2 border border-gray-400 text-center">
-                            <button id="edit-btn-${user.id}" class="edit-btn" title="Editar">
+                    ${userRole !== 'participant' ? `
+                        <td id="buttons-${user.id}" class="px-4 py-2 border border-gray-400 text-center md:grid">
+                            <button id="edit-btn-${user.id}" class="transition-all duration-300 ease-in-out hover:scale-125" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button id="delete-btn-${user.id}" class="delete-btn" title="Eliminar">
+                            <button id="delete-btn-${user.id}" class="transition-all duration-300 ease-in-out hover:scale-125" title="Eliminar">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
@@ -128,14 +141,18 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken) {
             taskUsers.style.overflowY = 'scroll';
 
             combinedData.forEach(user => {
+
                 const deleteButton = document.getElementById(`delete-btn-${user.id}`);
                 deleteButton.addEventListener('click', async () => {
-                    console.log(`Deleting user with ID: ${user.id}`);
                     showConfirm(apiUrl, user.id, taskId, users, accessToken);
+
                 });
 
                 const editButton = document.getElementById(`edit-btn-${user.id}`);
-                editButton.addEventListener('click', () => makeEditable(apiUrl, accessToken, user.id, taskId));
+                editButton.addEventListener('click', () => {
+                    makeEditable(apiUrl, accessToken, user.id, taskId);
+
+                });
             });
 
         }
@@ -235,7 +252,12 @@ async function fetchAllUsers(apiUrl, users, accessToken) {
 }
 
 
-async function assignUserToTask(apiUrl, taskId, users, accessToken) {
+async function assignUserToTask(apiUrl, taskId, users, accessToken, userRole) {
+    if (userRole === 'participant') {
+        showToast('No tienes permisos para realizar esta acción.', 'linear-gradient(to right, #DB0202, #750000)');
+        return;
+    }
+
     const userId = document.getElementById('user-select').value;
 
     if (!userId) {
@@ -272,6 +294,7 @@ async function assignUserToTask(apiUrl, taskId, users, accessToken) {
 }
 
 async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
+
     try {
         const response = await fetch(`${apiUrl}/tasks/${taskId}/users/${userId}`, {
             method: 'DELETE',
@@ -292,6 +315,58 @@ async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
         console.error(error.message);
     }
 }
+
+window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, accessToken) {
+    const userRole = await getUserRole(apiUrl, accessToken);
+
+    const categoriesDiv = document.getElementById('categories');
+    const usersDiv = document.getElementById('users');
+    const supervisorPanel = document.getElementById('supervisor-panel');
+    const taskInfo = document.getElementById('task-info');
+    const scores = document.getElementById('scores');
+    const mainContainer = document.getElementById('main-container');
+
+    if (userRole.toLocaleLowerCase() === 'participant') {
+        categoriesDiv.classList.add('hidden');
+        usersDiv.classList.add('hidden');
+        supervisorPanel.classList.add('hidden');
+
+        taskInfo.classList.add('order-1', 'md:order-1');
+        taskInfo.classList.remove('md:w-2/5');
+        taskInfo.classList.add('md:w-1/2');
+        taskInfo.classList.add('md:m-auto');
+        scores.classList.add('order-2', 'md:order-2');
+        scores.classList.remove('md:w-2/5');
+        scores.classList.add('md:w-1/2');
+        scores.classList.add('md:m-auto');
+        mainContainer.classList.add('flex-col');
+    } else {
+        categoriesDiv.classList.remove('hidden');
+        usersDiv.classList.remove('hidden');
+        supervisorPanel.classList.remove('hidden');
+
+        taskInfo.classList.remove('order-1', 'md:order-1');
+        taskInfo.classList.add('md:w-2/5');
+        taskInfo.classList.remove('md:w-1/2');
+        taskInfo.classList.remove('md:m-auto');
+        scores.classList.remove('order-2', 'md:order-2');
+        scores.classList.add('md:w-2/5');
+        scores.classList.remove('md:w-1/2');
+        scores.classList.remove('md:m-auto');
+        mainContainer.classList.remove('flex-col');
+    }
+
+    //Esto es para que fetchAllUsers actúe después de fetchTaskUsersAndScores para poder filtrar los usuarios en el desplegable
+    fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userRole).then(() => {
+        fetchAllUsers(apiUrl, users, accessToken);
+    });
+
+    const assignButton = document.getElementById('assign-user');
+    assignButton.addEventListener('click', function () {
+        assignUserToTask(apiUrl, taskId, users, accessToken, userRole);
+    });
+};
+
 
 function showToast(message, background) {
     Toastify({
@@ -337,16 +412,3 @@ function showConfirm(apiUrl, userId, taskId, users, accessToken) {
         }
     });
 }
-
-window.initializeUserAndScoreFunctions = function (apiUrl, taskId, users, accessToken) {
-
-    //Esto es para que fetchAllUsers actúe después de fetchTaskUsersAndScores para poder filtrar los usuarios en el desplegable
-    fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken).then(() => {
-        fetchAllUsers(apiUrl, users, accessToken);
-    });
-
-    const assignButton = document.getElementById('assign-user');
-    assignButton.addEventListener('click', function () {
-        assignUserToTask(apiUrl, taskId, users, accessToken);
-    });
-};
