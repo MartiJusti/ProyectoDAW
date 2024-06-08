@@ -3,7 +3,7 @@
 @section('title', 'Editar perfil')
 
 @section('content')
-    <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="min-h-screen flex items-center justify-center py-12 px-4 md:px-8">
         <div class="max-w-md w-full space-y-8">
             <div></div>
             <div>
@@ -17,13 +17,13 @@
                     <div class="mb-4">
                         <label for="username" class="sr-only">Nombre de Usuario</label>
                         <input id="username" name="username" type="text"
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-sm"
                             placeholder="Usuario">
                     </div>
                     <div>
                         <label for="password" class="sr-only">Contraseña</label>
                         <input id="password" name="password" type="password"
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm"
+                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-sm"
                             placeholder="Contraseña">
                     </div>
                 </div>
@@ -40,5 +40,5 @@
 @endsection
 
 @section('scripts')
-    @vite('/resources/js/user/accountUpdate.js')
+    @vite('resources/js/user/accountUpdate.js')
 @endsection

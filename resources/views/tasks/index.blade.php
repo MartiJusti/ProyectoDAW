@@ -16,5 +16,5 @@
 @endsection
 
 @section('scripts')
-    @vite('/resources/js/tasks/index.js')
+    @vite('resources/js/tasks/index.js')
 @endsection

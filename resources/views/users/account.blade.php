@@ -27,7 +27,7 @@
                         </div>
                     </div>
 
-                    <div class="flex items-end justify-end space-x-2">
+                    <div class="flex flex-col md:flex-row gap-3 md:gap-0 items-end justify-end space-x-2">
                         <a id="edit-link" href="{{route('users.account-edit')}}"
                             class="bg-yellow-500 hover:bg-[#d9a507] text-white py-1 px-3 md:py-2 md:px-4 rounded-xl focus:outline-none cursor-pointer">
                             Editar cuenta

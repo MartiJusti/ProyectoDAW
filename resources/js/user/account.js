@@ -1,18 +1,25 @@
-import { showToastWithCallback } from "../utils/showToastWithCallback";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    showToastWithCallback
+} from "../utils/showToastWithCallback";
+import {
+    formatDate
+} from "../utils/formatDate";
 
 document.addEventListener('DOMContentLoaded', async function () {
     const userName = document.getElementById("name");
     const userUsername = document.getElementById("username");
     const userEmail = document.getElementById("email");
     const userBirthday = document.getElementById("birthday");
-    const editLink = document.getElementById("edit-link");
     const deleteButton = document.getElementById("delete-btn");
 
     const apiUrl = 'http://127.0.0.1:8000/api';
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-        const user = await getCurrentUser();
+        const user = await getUserInfo(apiUrl, accessToken);
         userName.textContent = user.name;
         userUsername.textContent = user.username;
         userEmail.textContent = user.email;
@@ -26,26 +33,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     }
 
-    async function getCurrentUser() {
-        try {
-            const response = await fetch(`${apiUrl}/currentUser`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('No autorizado');
-            }
-
-            const user = await response.json();
-            return user;
-        } catch (error) {
-            console.error('Error:', error);
-        }
-    }
 
     async function deleteAccount(id) {
         try {
@@ -68,15 +55,6 @@ document.addEventListener('DOMContentLoaded', async function () {
         }
     }
 
-    function formatDate(dateString) {
-        const localeDate = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        };
-        return new Date(dateString).toLocaleDateString('es-ES', localeDate);
-    }
-
     function showConfirm(userID) {
         $.confirm({
             title: '¿Seguro que quieres borrar tu cuenta?',
@@ -95,8 +73,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 cancel: {
                     text: 'Cancelar',
                     btnClass: 'btn-red',
-                    action: function () {
-                    }
+                    action: function () {}
                 },
                 confirm: {
                     text: 'Confirmar',

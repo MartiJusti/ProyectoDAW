@@ -1,4 +1,9 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    formatDate
+} from "../utils/formatDate";
 
 document.addEventListener('DOMContentLoaded', async function () {
     const accessToken = localStorage.getItem('accessToken');
@@ -88,15 +93,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             table.appendChild(tbody);
             usersContainer.appendChild(table);
         }
-    }
-
-    function formatDate(dateString) {
-        const localeDate = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        };
-        return new Date(dateString).toLocaleDateString('es-ES', localeDate);
     }
 
     const normalizeString = (str) => {

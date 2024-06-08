@@ -1,6 +1,9 @@
 import {
     getUserInfo
 } from "../utils/getUserInfo";
+import {
+    formatDate
+} from "../utils/formatDate";
 
 document.addEventListener('DOMContentLoaded', async function () {
     const taskList = document.getElementById('task-list');
@@ -118,14 +121,5 @@ document.addEventListener('DOMContentLoaded', async function () {
             card.appendChild(taskLink);
             taskList.appendChild(card);
         });
-    }
-
-    function formatDate(dateString) {
-        const localteDate = {
-            day: '2-digit',
-            month: '2-digit',
-            year: 'numeric'
-        };
-        return new Date(dateString).toLocaleDateString('es-ES', localteDate);
     }
 });

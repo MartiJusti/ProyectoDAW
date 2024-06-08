@@ -14,7 +14,7 @@ export async function getUserInfo(apiUrl, accessToken) {
         const data = await response.json();
         return data;
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
         return null;
     }
 }

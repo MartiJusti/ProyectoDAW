@@ -1,4 +1,9 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
+    formatDate
+} from "../utils/formatDate";
 
 const apiUrl = 'http://127.0.0.1:8000/api';
 
@@ -38,11 +43,13 @@ function displayMessages(messages, chatContainer, authUser, otherUser) {
         if (message.sender_id === authUser.id) {
             messageElement.classList.add('bg-green-100', 'self-end', 'text-right');
             messageElement.innerHTML =
-                `<span class="font-bold">${authUser.username}</span>: ${message.content}`;
+                `<span class="font-bold">${authUser.username}</span>: ${message.content}
+                 <div class="text-xs">${formatDate(message.date_sent)}</div>`;
         } else {
             messageElement.classList.add('bg-red-100', 'self-start', 'text-left');
             messageElement.innerHTML =
-                `<span class="font-bold">${otherUser.username}</span>: ${message.content}`;
+                `<span class="font-bold">${otherUser.username}</span>: ${message.content}
+                 <div class="text-xs">${formatDate(message.date_sent)}</div>`;
         }
         chatContainer.appendChild(messageElement);
     });
@@ -78,30 +85,13 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
         });
 }
 
-/* function formatDate(dateString) {
-    const localeDate = {
-        hour: '2-digit',
-        minute: '2-digit'
-    };
-    return new Date(dateString).toLocaleDateString('es-ES', localeDate);
-} */
-
-function formatDate(dateString) {
-    const localeDate = {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric'
-    };
-    return new Date(dateString).toLocaleDateString('es-ES', localeDate);
-}
-
 window.initializeChat = async function (otherUser, accessToken) {
     const chatContainer = document.getElementById('chat-container');
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
 
     const userInfo = await getUserInfo(apiUrl, accessToken);
-console.log(userInfo.rol);
+    console.log(userInfo.rol);
 
     fetchMessages(otherUser.id, accessToken, chatContainer, userInfo, otherUser);
 

@@ -8,21 +8,27 @@ document.addEventListener('DOMContentLoaded', async function () {
     const userInfo = await getUserInfo(apiUrl, accessToken);
 
     const registerForm = document.getElementById('register-form');
-    const registerTitle = document.getElementById('register-title');
-    const registerButton = document.getElementById('register-button');
     const rolSelect = document.getElementById('rol-select');
 
-    if (accessToken && userInfo.rol.toLowerCase() !== 'admin') {
+    if (accessToken && userInfo && userInfo.rol.toLowerCase() !== 'admin') {
         window.location.href = "/";
     }
 
-    if (accessToken && userInfo.rol.toLowerCase() === 'admin') {
-        registerTitle.textContent = 'Crear cuenta';
-        registerButton.textContent = 'Crear cuenta';
+    if (accessToken && userInfo && userInfo.rol.toLowerCase() === 'admin') {
+
+        rolSelect.innerHTML = `<label for="role" class="sr-only">Rol</label>
+        <select id="role" name="rol"
+            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 text-sm">
+            <option value="" disabled selected>Selecciona un rol</option>
+            <option value="supervisor">Supervisor</option>
+            <option value="participant">Participante</option>
+        </select>`;
     }
 
     if (!accessToken || userInfo.rol.toLowerCase() !== 'admin') {
         rolSelect.classList.add('hidden');
+    } else {
+        rolSelect.classList.remove('hidden');
     }
 
     registerForm.addEventListener('submit', function (e) {

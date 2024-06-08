@@ -24,7 +24,7 @@
     @yield('scripts')
 
 
-    @vite('/resources/js/layout.js')
+    @vite('resources/js/layout.js')
     {{-- El script de ToastifyJS se coloca aquí porque la página web lo dice --}}
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 </body>

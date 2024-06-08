@@ -1,4 +1,7 @@
 import {
+    getUserInfo
+} from "../utils/getUserInfo";
+import {
     showToastWithCallback
 } from "../utils/showToastWithCallback";
 
@@ -9,7 +12,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const accessToken = localStorage.getItem('accessToken');
 
     try {
-        const user = await getCurrentUser();
+        const user = await getUserInfo(apiUrl, accessToken);
         usernameInput.value = user.username;
 
         const editForm = document.getElementById('edit-account-form');
@@ -37,28 +40,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     } catch (error) {
         console.error('Error:', error);
 
-    }
-
-    async function getCurrentUser() {
-
-        try {
-            const response = await fetch(`${apiUrl}/currentUser`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${accessToken}`,
-                    'Content-Type': 'application/json'
-                },
-            });
-
-            if (!response.ok) {
-                throw new Error('No autorizado');
-            }
-
-            const user = await response.json();
-            return user;
-        } catch (error) {
-            console.error('Error:', error);
-        }
     }
 
     async function editUser(userId, userData) {
