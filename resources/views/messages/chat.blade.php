@@ -20,11 +20,10 @@
     @vite('resources/js/messages/chat.js')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const authUser = JSON.parse(localStorage.getItem('userInfo'));
             const otherUser = @json($otherUser);
             const accessToken = localStorage.getItem('accessToken');
 
-            initializeChat(authUser, otherUser, accessToken);
+            initializeChat(otherUser, accessToken);
         });
     </script>
 @endsection

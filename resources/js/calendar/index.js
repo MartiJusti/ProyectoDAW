@@ -1,8 +1,31 @@
 const accessToken = localStorage.getItem('accessToken');
-const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
 document.addEventListener('DOMContentLoaded', async function () {
     const apiUrl = 'http://127.0.0.1:8000/api';
+
+    async function getUserInfo(apiUrl, accessToken) {
+        try {
+            const response = await fetch(`${apiUrl}/currentUser`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener la información del usuario.');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(error.message);
+            return null;
+        }
+    }
+
+    const userInfo = await getUserInfo(apiUrl, accessToken);
+    console.log(userInfo.rol);
 
     var calendarEl = document.getElementById('calendar');
 

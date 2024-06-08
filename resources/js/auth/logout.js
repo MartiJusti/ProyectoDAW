@@ -1,4 +1,31 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+    const accessToken = localStorage.getItem('accessToken');
+    const apiUrl = 'http://127.0.0.1:8000/api';
+
+    async function getUserRole(apiUrl, accessToken) {
+        try {
+            const response = await fetch(`${apiUrl}/currentUser`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener la información del usuario.');
+            }
+
+            const data = await response.json();
+            console.log(data.rol);
+            return data.rol;
+        } catch (error) {
+            console.error(error.message);
+            return null;
+        }
+    }
+
+    const userRole = await getUserRole(apiUrl, accessToken);
+
     const registerLink = document.getElementById('register-link');
     const loginLink = document.getElementById('login-link');
     const logoutLink = document.getElementById('logout-link');
@@ -9,23 +36,19 @@ document.addEventListener('DOMContentLoaded', function () {
     const calendarLink = document.getElementById('calendar-link');
     const usersLink = document.getElementById('users-link');
 
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-    const accessToken = localStorage.getItem('accessToken');
-    const apiUrl = 'http://127.0.0.1:8000/api/logout';
-
-    if (userInfo && userInfo.rol.toLocaleLowerCase() == 'admin') {
+    if (accessToken && userRole.toLocaleLowerCase() == 'admin') {
         usersLink.classList.remove('hidden');
     } else {
         usersLink.classList.add('hidden');
     }
 
-    if (userInfo && userInfo.rol.toLocaleLowerCase() == 'participant') {
+    if (accessToken && userRole.toLocaleLowerCase() == 'participant') {
         taskCreateLink.classList.add('hidden');
     } else {
         taskCreateLink.classList.remove('hidden');
     }
 
-    if (!userInfo || userInfo.rol.toLocaleLowerCase() == 'admin') {
+    if (!accessToken || userRole.toLocaleLowerCase() == 'admin') {
         registerLink.classList.remove('hidden');
     } else {
         registerLink.classList.add('hidden');
@@ -46,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     if (logoutLink) {
         logoutLink.addEventListener('click', function () {
-            fetch(apiUrl, {
+            fetch(`${apiUrl}/logout`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${accessToken}`
@@ -60,7 +83,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .then(data => {
                     localStorage.removeItem('accessToken');
-                    localStorage.removeItem('userInfo');
                     window.location.href = "/login";
                 })
                 .catch(error => {

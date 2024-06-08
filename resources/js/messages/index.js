@@ -1,8 +1,31 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const usersList = document.getElementById('users-list');
     const accessToken = localStorage.getItem('accessToken');
-    const authUser = JSON.parse(localStorage.getItem('userInfo'));
     const apiUrl = 'http://127.0.0.1:8000/api';
+
+    async function getUserInfo(apiUrl, accessToken) {
+        try {
+            const response = await fetch(`${apiUrl}/currentUser`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener la información del usuario.');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(error.message);
+            return null;
+        }
+    }
+
+    const userInfo = await getUserInfo(apiUrl, accessToken);
+    console.log(userInfo.rol);
 
     fetch(`${apiUrl}/users`, {
             headers: {
@@ -19,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function () {
             usersList.innerHTML = '';
 
             users
-                .filter(user => user.id !== authUser.id)
+                .filter(user => user.id !== userInfo.id)
                 .forEach(user => {
                     const userLink = document.createElement('a');
                     userLink.classList.add('flex', 'items-center', 'p-4', 'border-b', 'border-gray-200', 'cursor-pointer', 'hover:bg-gray-100', 'gap-2');

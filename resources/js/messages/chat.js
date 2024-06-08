@@ -1,6 +1,29 @@
+const apiUrl = 'http://127.0.0.1:8000/api';
+
+async function getUserInfo(apiUrl, accessToken) {
+    try {
+        const response = await fetch(`${apiUrl}/currentUser`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${accessToken}`
+            }
+        });
+
+        if (!response.ok) {
+            throw new Error('Error al obtener la información del usuario.');
+        }
+
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error(error.message);
+        return null;
+    }
+}
+
+
 
 function fetchMessages(otherUserId, accessToken, chatContainer, authUser, otherUser) {
-    const apiUrl = 'http://127.0.0.1:8000/api';
 
     fetch(`${apiUrl}/messages/with/${otherUserId}`, {
             headers: {
@@ -49,7 +72,6 @@ function displayMessages(messages, chatContainer, authUser, otherUser) {
 }
 
 function sendMessage(content, accessToken, senderId, receiverId, callback) {
-    const apiUrl = 'http://127.0.0.1:8000/api';
 
     fetch(`${apiUrl}/messages`, {
             method: 'POST',
@@ -94,19 +116,22 @@ function formatDate(dateString) {
     return new Date(dateString).toLocaleDateString('es-ES', localeDate);
 }
 
-window.initializeChat = function (authUser, otherUser, accessToken) {
+window.initializeChat = async function (otherUser, accessToken) {
     const chatContainer = document.getElementById('chat-container');
     const messageForm = document.getElementById('message-form');
     const messageInput = document.getElementById('message-input');
 
-    fetchMessages(otherUser.id, accessToken, chatContainer, authUser, otherUser);
+    const userInfo = await getUserInfo(apiUrl, accessToken);
+console.log(userInfo.rol);
+
+    fetchMessages(otherUser.id, accessToken, chatContainer, userInfo, otherUser);
 
     messageForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const content = messageInput.value;
         if (content.trim() !== '') {
-            sendMessage(content, accessToken, authUser.id, otherUser.id, () => {
-                fetchMessages(otherUser.id, accessToken, chatContainer, authUser, otherUser);
+            sendMessage(content, accessToken, userInfo.id, otherUser.id, () => {
+                fetchMessages(otherUser.id, accessToken, chatContainer, userInfo, otherUser);
             });
             messageInput.value = '';
         }

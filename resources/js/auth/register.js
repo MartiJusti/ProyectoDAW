@@ -1,29 +1,55 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
+
+    const accessToken = localStorage.getItem('accessToken');
+    const apiUrl = 'http://127.0.0.1:8000/api';
+
+    async function getUserRole(apiUrl, accessToken) {
+        try {
+            const response = await fetch(`${apiUrl}/currentUser`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener la información del usuario.');
+            }
+
+            const data = await response.json();
+            console.log(data.rol);
+            return data.rol;
+        } catch (error) {
+            console.error(error.message);
+            return null;
+        }
+    }
+
+    const userRole = await getUserRole(apiUrl, accessToken);
+
     const registerForm = document.getElementById('register-form');
     const registerTitle = document.getElementById('register-title');
     const registerButton = document.getElementById('register-button');
     const rolSelect = document.getElementById('rol-select');
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
-    if (userInfo && userInfo.rol.toLowerCase() !== 'admin') {
+    if (accessToken && userRole.toLowerCase() !== 'admin') {
         window.location.href = "/";
     }
 
-    if (userInfo && userInfo.rol.toLowerCase() === 'admin') {
+    if (accessToken && userRole.toLowerCase() === 'admin') {
         registerTitle.textContent = 'Crear cuenta';
         registerButton.textContent = 'Crear cuenta';
     }
 
-    if (!userInfo || userInfo.rol.toLowerCase() !== 'admin') {
+    if (!accessToken || userRole.toLowerCase() !== 'admin') {
         rolSelect.classList.add('hidden');
     }
 
     registerForm.addEventListener('submit', function (e) {
         e.preventDefault();
-        const apiUrl = 'http://127.0.0.1:8000/api/register';
         const formData = new FormData(registerForm);
 
-        fetch(apiUrl, {
+        fetch(`${apiUrl}/register`, {
                 method: 'POST',
                 body: formData
             })
@@ -54,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 background: background,
             },
             callback: function () {
-                if (!userInfo) {
+                if (!accessToken) {
                     window.location.href = '/login';
                 }
             }

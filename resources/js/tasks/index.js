@@ -1,12 +1,37 @@
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', async function () {
     const taskList = document.getElementById('task-list');
     const searchInput = document.getElementById('search');
     const accessToken = localStorage.getItem('accessToken');
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
 
     const apiUrl = 'http://127.0.0.1:8000/api';
 
     let tasks = [];
+
+    async function getUserInfo(apiUrl, accessToken) {
+        try {
+            const response = await fetch(`${apiUrl}/currentUser`, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error('Error al obtener la información del usuario.');
+            }
+
+            const data = await response.json();
+            return data;
+        } catch (error) {
+            console.error(error.message);
+            return null;
+        }
+    }
+
+    const userInfo = await getUserInfo(apiUrl, accessToken);
+    console.log(userInfo.rol);
+    console.log(userInfo.id);
+    console.log(userInfo);
 
     if (userInfo.rol === "admin") {
         fetch(`${apiUrl}/tasks`, {

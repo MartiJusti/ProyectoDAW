@@ -1,6 +1,5 @@
 document.addEventListener('DOMContentLoaded', async function () {
     const accessToken = localStorage.getItem('accessToken');
-    const userInfo = JSON.parse(localStorage.getItem('userInfo'));
     const apiUrl = 'http://127.0.0.1:8000/api';
     const searchInput = document.getElementById('search');
     let users = [];
