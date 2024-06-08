@@ -40,36 +40,39 @@
                         </button>
                     </div>
                 </div>
-                <div class="bg-gray-100 p-4 rounded-lg">
-                    @if ($user->tasks->isEmpty())
-                        <p class="text-gray-500 text-sm md:text-base">No hay tareas disponibles.</p>
-                    @else
-                        <h2 class="font-semibold mb-2 text-sm md:text-base">
-                            @if ($user->rol == 'participant')
-                                Tareas del usuario:
-                            @else
-                                Tareas que supervisa:
-                            @endif
-                        </h2>
-                        <ol class="list-decimal pl-6 space-y-1 md:space-y-2 text-sm md:text-base">
-                            @foreach ($user->tasks as $task)
-                                <li>
-                                    <span class="font-bold">{{ $task->name }}</span>
-                                    @if ($user->rol == 'participant')
-                                        @php
-                                            $score = $task->scores->where('user_id', $user->id)->first();
-                                        @endphp
-                                        - Puntuación:
-                                        @if ($score)
-                                            <span class="font-bold">{{ $score->points }}</span>
-                                        @else
-                                            <span class="font-bold">0</span>
-                                        @endif
-                                    @endif
+                <div id="tasks-scores" class="bg-gray-100 p-4 rounded-lg">
+                    @if ($user->rol != 'admin')
 
-                                </li>
-                            @endforeach
-                        </ol>
+                        @if ($user->tasks->isEmpty())
+                            <p class="text-gray-500 text-sm md:text-base">No hay tareas disponibles.</p>
+                        @else
+                            <h2 class="font-semibold mb-2 text-sm md:text-base">
+                                @if ($user->rol == 'participant')
+                                    Tareas del usuario:
+                                @else
+                                    Tareas que supervisa:
+                                @endif
+                            </h2>
+                            <ol class="list-decimal pl-6 space-y-1 md:space-y-2 text-sm md:text-base">
+                                @foreach ($user->tasks as $task)
+                                    <li>
+                                        <span class="font-bold">{{ $task->name }}</span>
+                                        @if ($user->rol == 'participant')
+                                            @php
+                                                $score = $task->scores->where('user_id', $user->id)->first();
+                                            @endphp
+                                            - Puntuación:
+                                            @if ($score)
+                                                <span class="font-bold">{{ $score->points }}</span>
+                                            @else
+                                                <span class="font-bold">0</span>
+                                            @endif
+                                        @endif
+
+                                    </li>
+                                @endforeach
+                            </ol>
+                        @endif
                     @endif
                 </div>
             </div>

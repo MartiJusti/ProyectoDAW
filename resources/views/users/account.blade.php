@@ -37,7 +37,9 @@
                             Borrar cuenta
                         </button>
                     </div>
-
+                    <div>
+                        <div id="tasks-scores"></div>
+                    </div>
                 </div>
             </div>
         </div>

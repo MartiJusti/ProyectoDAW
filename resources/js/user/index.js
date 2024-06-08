@@ -30,7 +30,10 @@ document.addEventListener('DOMContentLoaded', async function () {
                 throw new Error('Error al obtener los usuarios.');
             }
 
-            users = await response.json();
+            let usersToFilter = await response.json();
+
+            users = usersToFilter.filter(user => user.rol.toLowerCase() !== 'admin');
+
             renderUsers(users);
         } catch (error) {
             console.error(error.message);

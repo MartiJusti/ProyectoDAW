@@ -48,7 +48,6 @@ Route::group([
     Route::get('/scores/users/{userId}', [ScoreApiController::class, 'getScoresByUserId']);
     Route::get('/scores/tasks/{taskId}', [ScoreApiController::class, 'getScoresByTaskId']);
     Route::get('/scores/users/{userId}/tasks/{taskId}', [ScoreApiController::class, 'getScoreByUserIdAndTaskId']);
-    //Route::patch('/scores/{userId}/{taskId}', [ScoreApiController::class, 'updateByUserIdAndTaskId']);
     Route::patch('/scores/{userId}/{taskId}', [ScoreApiController::class, 'updateScore']);
     Route::post('/scores/{userId}/{taskId}', [ScoreApiController::class, 'createScore']);
 
