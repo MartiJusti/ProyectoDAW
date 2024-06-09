@@ -19,7 +19,7 @@ function fetchMessages(otherUserId, accessToken, chatContainer, authUser, otherU
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Network response was not ok');
+                throw new Error('Error en la respuesta');
             }
             return response.json();
         })
@@ -27,7 +27,7 @@ function fetchMessages(otherUserId, accessToken, chatContainer, authUser, otherU
             displayMessages(messages, chatContainer, authUser, otherUser);
         })
         .catch(error => {
-            console.error(error);
+            /* console.error(error); */
         });
 }
 
@@ -76,7 +76,7 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Error sending message');
+                throw new Error('Error al enviar el mensaje');
             }
             return response.json();
         })
@@ -84,7 +84,7 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
             callback();
         })
         .catch(error => {
-            console.error(error);
+            /* console.error(error); */
         });
 }
 
@@ -94,7 +94,6 @@ window.initializeChat = async function (otherUser, accessToken) {
     const messageInput = document.getElementById('message-input');
 
     const userInfo = await getUserInfo(apiUrl, accessToken);
-    console.log(userInfo.rol);
 
     fetchMessages(otherUser.id, accessToken, chatContainer, userInfo, otherUser);
 

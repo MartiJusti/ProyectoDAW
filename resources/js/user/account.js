@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
             showConfirm(user.id);
         });
     } catch (error) {
-        console.error('Error:', error);
+        /* console.error('Error:', error); */
 
     }
 
@@ -49,7 +49,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             }
 
             const tasksData = await tasksResponse.json();
-            console.log(tasksData);
 
             let scoresData = [];
             if (user.rol === 'participant') {
@@ -116,7 +115,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             document.getElementById('task-list').appendChild(tasksScoresDiv);
         } catch (error) {
-            console.error(error.message);
+            /* console.error(error.message); */
         }
     }
 
@@ -139,7 +138,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 });
             }
         } catch (error) {
-            console.error(`Error inesperado al eliminar usuario: ${error}`);
+            /* console.error(error); */
         }
     }
 

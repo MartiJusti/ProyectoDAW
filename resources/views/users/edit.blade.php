@@ -47,9 +47,6 @@
             const userId = @json($user->id);
             const accessToken = localStorage.getItem('accessToken');
 
-            console.log(userId);
-            console.log(accessToken);
-
             intializeEditUser(userId, accessToken);
         });
     </script>

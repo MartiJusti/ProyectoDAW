@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     const errorData = JSON.parse(error.message);
                     displayErrors(errorData.errors);
                 } catch (e) {
-                    console.error('Error:', error.message);
+                    /* console.error('Error:', error.message); */
                 }
 
             });

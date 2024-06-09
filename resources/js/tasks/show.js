@@ -40,7 +40,7 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userR
         const scoresContainer = document.getElementById("scores");
         taskUsers.innerHTML = '';
         users.length = 0;
-        console.log(usersData);
+
         if (usersData.length === 0 || (usersData.length === 1 && usersData.rol !== 'participant')) {
 
             scoresContainer.classList.add('flex');
@@ -142,7 +142,7 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userR
 
         }
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -190,7 +190,7 @@ async function savePoints(apiUrl, accessToken, userId, taskId) {
         await fetchTaskUsersAndScores(apiUrl, taskId, [], accessToken);
 
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -232,7 +232,7 @@ async function fetchAllUsers(apiUrl, users, accessToken) {
             userSelect.appendChild(option);
         });
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -274,7 +274,7 @@ async function assignUserToTask(apiUrl, taskId, users, accessToken, userRole) {
         await fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken);
         await fetchAllUsers(apiUrl, users, accessToken);
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -297,7 +297,7 @@ async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
         await fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken);
         await fetchAllUsers(apiUrl, users, accessToken);
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 

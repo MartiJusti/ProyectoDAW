@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
             renderUsers(users);
         } catch (error) {
-            console.error(error.message);
+            /* console.error(error.message); */
         }
     }
 

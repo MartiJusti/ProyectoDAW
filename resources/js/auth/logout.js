@@ -70,7 +70,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                     window.location.href = "/login";
                 })
                 .catch(error => {
-                    console.error(error);
+                    /* console.error(error); */
                 });
         });
     }

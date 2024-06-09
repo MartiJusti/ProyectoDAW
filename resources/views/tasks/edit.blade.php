@@ -52,9 +52,6 @@
             const taskId = @json($task->id);
             const accessToken = localStorage.getItem('accessToken');
 
-            console.log(taskId);
-            console.log(accessToken);
-
             initializeEditTask(taskId, accessToken);
         });
     </script>

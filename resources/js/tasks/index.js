@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 displayTasks(tasks);
             })
             .catch(error => {
-                console.error(error);
+                /* console.error(error); */
             });
     } else {
         fetch(`${apiUrl}/users/${userInfo.id}/tasks`, {
@@ -55,7 +55,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 displayTasks(tasks);
             })
             .catch(error => {
-                console.error(error);
+                /* console.error(error); */
             });
     }
 

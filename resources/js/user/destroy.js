@@ -20,7 +20,7 @@ async function deleteUser(apiUrl, userId, accessToken) {
             throw new Error(data.error || 'Error al borrar.');
         }
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 

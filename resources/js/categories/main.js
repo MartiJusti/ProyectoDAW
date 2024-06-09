@@ -31,7 +31,7 @@ async function fetchAllCategories(apiUrl, taskCategories, accessToken) {
             categorySelect.appendChild(option);
         });
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -64,7 +64,7 @@ async function fetchTaskCategories(apiUrl, accessToken, taskId, categories) {
             categoryList.textContent = `${categoryNames.join(', ')}`;
         }
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 
@@ -105,7 +105,7 @@ async function assignCategoryToTask(apiUrl, accessToken, taskId, categories, use
         await fetchAllCategories(apiUrl, categories, accessToken);
 
     } catch (error) {
-        console.error(error.message);
+        /* console.error(error.message); */
     }
 }
 

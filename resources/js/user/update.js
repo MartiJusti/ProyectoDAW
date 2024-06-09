@@ -47,7 +47,7 @@ async function editUser(userId, accessToken) {
                 const errorData = JSON.parse(error.message);
                 displayErrors(errorData.errors);
             } catch (e) {
-                console.error('Error:', error.message);
+                /* console.error(error.message); */
             }
         }
     });

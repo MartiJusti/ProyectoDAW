@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const apiUrl = 'http://127.0.0.1:8000/api';
 
     const userInfo = await getUserInfo(apiUrl, accessToken);
-    console.log(userInfo.rol);
 
     var calendarEl = document.getElementById('calendar');
 
@@ -21,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             });
             if (!response.ok) {
-                console.error(response.statusText);
+                /* console.error(response.statusText); */
                 return [];
             }
             const data = await response.json();
@@ -29,11 +28,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (Array.isArray(data)) {
                 return data;
             } else {
-                console.error(data);
+                /* console.error(data); */
                 return [];
             }
         } catch (error) {
-            console.error(error);
+            /* console.error(error); */
             return [];
         }
     }
@@ -47,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                 }
             });
             if (!response.ok) {
-                console.error(response.statusText);
+                /* console.error(response.statusText); */
                 return [];
             }
             const data = await response.json();
@@ -55,11 +54,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             if (Array.isArray(data)) {
                 return data;
             } else {
-                console.error(data);
+                /* console.error(data); */
                 return [];
             }
         } catch (error) {
-            console.error(error);
+            /* console.error(error); */
             return [];
         }
     }

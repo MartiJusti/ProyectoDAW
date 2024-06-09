@@ -9,7 +9,6 @@ document.addEventListener('DOMContentLoaded', async function () {
     const apiUrl = 'http://127.0.0.1:8000/api';
 
     const userInfo = await getUserInfo(apiUrl, accessToken);
-    console.log(userInfo.rol);
 
     searchInput.classList.add('mx-auto');
 
@@ -67,6 +66,6 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
         })
         .catch(error => {
-            console.error(error);
+            /* console.error(error); */
         });
 });

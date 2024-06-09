@@ -61,7 +61,7 @@ async function editTask(taskId, accessToken, userRole) {
                 const errorData = JSON.parse(error.message);
                 displayErrors(errorData.errors);
             } catch (e) {
-                console.error('Error:', error.message);
+                /* console.error('Error:', error.message); */
             }
         }
     });
