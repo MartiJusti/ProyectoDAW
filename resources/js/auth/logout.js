@@ -45,6 +45,7 @@ document.addEventListener('DOMContentLoaded', async function () {
         if (logoutLink) logoutLink.classList.add('hidden');
         if (tasksLink) tasksLink.classList.add('hidden');
         if (taskCreateLink) taskCreateLink.classList.add('hidden');
+        if (categoryCreateLink) categoryCreateLink.classList.add('hidden');
         if (messagesLink) messagesLink.classList.add('hidden');
         if (profileLink) profileLink.classList.add('hidden');
         if (calendarLink) calendarLink.classList.add('hidden');
