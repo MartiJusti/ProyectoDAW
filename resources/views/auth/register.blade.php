@@ -14,7 +14,7 @@
             </div>
             <form class="mt-8 space-y-6" id="register-form">
                 @csrf
-                <div class="rounded-md shadow-sm">
+                <div class="rounded-2xl shadow-sm">
                     <div class="mb-2">
                         <label for="name" class="sr-only">Nombre</label>
                         <input id="name" name="name" type="text" required
@@ -52,7 +52,7 @@
 
                 <div>
                     <button type="submit" id="register-button"
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-2xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Crear cuenta
                     </button>
                 </div>

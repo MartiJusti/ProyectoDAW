@@ -4,7 +4,7 @@
 
 @section('content')
     <div class="container mx-auto py-8 px-4">
-        <div id="account-info" class="max-w-md mx-auto bg-white shadow-md rounded-md overflow-hidden">
+        <div id="account-info" class="max-w-md mx-auto bg-white shadow-md rounded-2xl overflow-hidden">
             <div class="p-6 space-y-6 md:space-y-10">
                 <div class="flex flex-col space-y-6 md:space-y-14">
                     <div>
@@ -29,11 +29,11 @@
 
                     <div class="flex flex-col md:flex-row gap-3 md:gap-0 items-end justify-end space-x-2">
                         <a id="edit-link" href="{{ route('users.account-edit') }}"
-                            class="bg-yellow-500 hover:bg-[#d9a507] text-white py-1 px-3 md:py-2 md:px-4 rounded-xl focus:outline-none cursor-pointer">
+                            class="bg-yellow-500 hover:bg-[#d9a507] text-white py-1 px-3 md:py-2 md:px-4 rounded-2xl focus:outline-none cursor-pointer">
                             Editar cuenta
                         </a>
                         <button id="delete-btn"
-                            class="bg-red-500 text-white py-1 px-3 md:py-2 md:px-4 rounded-xl hover:bg-red-600 focus:outline-none">
+                            class="bg-red-500 text-white py-1 px-3 md:py-2 md:px-4 rounded-2xl hover:bg-red-600 focus:outline-none">
                             Borrar cuenta
                         </button>
                     </div>

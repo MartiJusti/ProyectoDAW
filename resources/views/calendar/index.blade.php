@@ -9,7 +9,7 @@
 
 @section('content')
     <div class="max-w-4xl mx-auto mt-8">
-        <div id="calendar" class="p-4 bg-white rounded-lg shadow-lg"></div>
+        <div id="calendar" class="p-4 bg-white rounded-2xl shadow-xl"></div>
     </div>
 @endsection
 

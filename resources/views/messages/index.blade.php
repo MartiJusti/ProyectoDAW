@@ -8,7 +8,7 @@
         <div class="w-full md:w-3/12 mx-auto">
             <input type="text" id="search" placeholder="Buscar usuarios..." class="mb-4 p-2 border rounded-xl w-full">
         </div>
-        <div class="max-w-sm mx-auto p-4 bg-white rounded-lg shadow-lg">
+        <div class="max-w-sm mx-auto p-4 bg-white rounded-2xl shadow-lg">
             <div id="users-list"></div>
         </div>
     </div>

@@ -11,13 +11,8 @@ document.addEventListener('DOMContentLoaded', async function () {
     const accessToken = localStorage.getItem('accessToken');
 
     const apiUrl = 'http://127.0.0.1:8000/api';
-
-    let tasks = [];
-
     const userInfo = await getUserInfo(apiUrl, accessToken);
-    console.log(userInfo.rol);
-    console.log(userInfo.id);
-    console.log(userInfo);
+    let tasks = [];
 
     if (userInfo.rol === "admin") {
         fetch(`${apiUrl}/tasks`, {
@@ -52,6 +47,11 @@ document.addEventListener('DOMContentLoaded', async function () {
             })
             .then(data => {
                 tasks = data;
+                if (userInfo.rol === 'participant') {
+                    const today = new Date();
+                    tasks = tasks.filter(task => new Date(task.date_end) > today);
+                }
+
                 displayTasks(tasks);
             })
             .catch(error => {
@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
         tasks.forEach(task => {
             const card = document.createElement('div');
-            card.classList.add('bg-gray-200', 'p-4', 'rounded-md', 'shadow-md',
+            card.classList.add('bg-gray-200', 'p-4', 'rounded-2xl', 'shadow-md',
                 'hover:shadow-lg', 'transition', 'duration-300',
                 'ease-in-out',
                 'transform', 'hover:scale-105', 'cursor-pointer');

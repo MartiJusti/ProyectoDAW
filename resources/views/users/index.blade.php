@@ -10,7 +10,7 @@
                 class="mb-4 p-2 border rounded-xl w-5/6 md:w-3/12">
         </div>
 
-        <div id="users-container" class="bg-gray-100 p-4 rounded shadow-md">
+        <div id="users-container" class="bg-gray-100 p-4 rounded-2xl shadow-md">
         </div>
     </div>
 @endsection

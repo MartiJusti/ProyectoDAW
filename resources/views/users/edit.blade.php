@@ -13,7 +13,7 @@
             </div>
             <form id="edit-user-form" class="mt-8 space-y-6">
                 @csrf
-                <div class="rounded-md shadow-sm -space-y-px">
+                <div class="rounded-2xl shadow-sm -space-y-px">
                     <div class="mb-4">
                         <label for="username" class="sr-only">Nombre de Usuario</label>
                         <input id="username" name="username" type="text" value="{{$user->username}}"
@@ -30,7 +30,7 @@
 
                 <div>
                     <button id="edit-btn" type="submit"
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
+                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-2xl text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
                         Guardar cambios
                     </button>
                 </div>

@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const logoutLink = document.getElementById('logout-link');
     const tasksLink = document.getElementById('tasks-link');
     const taskCreateLink = document.getElementById('task-create-link');
+    const categoryCreateLink = document.getElementById('category-create-link');
     const messagesLink = document.getElementById('messages-link');
     const profileLink = document.getElementById('profile-link');
     const calendarLink = document.getElementById('calendar-link');
@@ -24,8 +25,10 @@ document.addEventListener('DOMContentLoaded', async function () {
 
     if (accessToken && userInfo.rol.toLocaleLowerCase() === 'participant') {
         taskCreateLink.classList.add('hidden');
+        categoryCreateLink.classList.add('hidden');
     } else {
         taskCreateLink.classList.remove('hidden');
+        categoryCreateLink.classList.remove('hidden');
     }
 
     if (!accessToken || userInfo.rol.toLocaleLowerCase() === 'admin') {

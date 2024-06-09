@@ -21,11 +21,13 @@
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Iniciar sesión</a>
         <a href="{{ route('auth.register') }}" id="register-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Crear
-            cuenta</a>
+            Cuenta</a>
         <a href="{{ route('tasks.index') }}" id="tasks-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Tareas</a>
         <a href="{{ route('tasks.create') }}" id="task-create-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Crear Tarea</a>
+            <a href="{{ route('categories.create') }}" id="category-create-link"
+            class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Crear Categoría</a>
         <a href="{{ route('users.index') }}" id="users-link"
             class="block py-2 px-4 border-b border-gray-300 hover:bg-gray-200">Usuarios</a>
         <a href="{{ route('messages.index') }}" id="messages-link"

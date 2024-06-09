@@ -104,10 +104,10 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userR
                     </td>
                     ${userRole !== 'participant' ? `
                         <td id="buttons-${user.id}" class="px-4 py-2 border border-gray-400 text-center md:grid">
-                            <button id="edit-btn-${user.id}" class="transition-all duration-300 ease-in-out hover:scale-125" title="Editar">
+                            <button id="edit-btn-${user.id}" class="transition-all duration-300 ease-in-out hover:scale-125 rounded-2xl" title="Editar">
                                 <i class="fas fa-edit"></i>
                             </button>
-                            <button id="delete-btn-${user.id}" class="transition-all duration-300 ease-in-out hover:scale-125" title="Eliminar">
+                            <button id="delete-btn-${user.id}" class="transition-all duration-300 ease-in-out hover:scale-125 rounded-2xl" title="Eliminar">
                                 <i class="fas fa-trash-alt"></i>
                             </button>
                         </td>
@@ -311,6 +311,8 @@ window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, 
     const scores = document.getElementById('scores');
     const mainContainer = document.getElementById('main-container');
 
+    /* Este código es para ocultar los elementos de supervisor y
+    organizar los contenedores */
     if (userInfo.rol.toLocaleLowerCase() === 'participant') {
         categoriesDiv.classList.add('hidden');
         usersDiv.classList.add('hidden');

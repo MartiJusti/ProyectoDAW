@@ -1,4 +1,6 @@
-import { getUserInfo } from "../utils/getUserInfo";
+import {
+    getUserInfo
+} from "../utils/getUserInfo";
 
 const accessToken = localStorage.getItem('accessToken');
 
@@ -75,7 +77,13 @@ document.addEventListener('DOMContentLoaded', async function () {
                 successCallback(adminTasks);
             } else {
                 const events = await fetchEvents();
-                successCallback(events);
+                if (userInfo.rol === 'participant') {
+                    const today = new Date();
+                    const filteredEvents = events.filter(event => new Date(event.end) > today);
+                    successCallback(filteredEvents);
+                } else {
+                    successCallback(events);
+                }
             }
         },
         headerToolbar: {

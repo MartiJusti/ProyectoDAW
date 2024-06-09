@@ -69,5 +69,4 @@ class TaskUserApiController extends Controller
         return response()->json($tasks, 200);
     }
 
-
 }
