@@ -1,3 +1,5 @@
+/* Función que obtiene la información del usuario autenticado
+para luego utilizarla en la aplicación */
 export async function getUserInfo(apiUrl, accessToken) {
     try {
         const response = await fetch(`${apiUrl}/currentUser`, {

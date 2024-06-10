@@ -4,6 +4,7 @@
 
 @section('styles')
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.min.css" rel="stylesheet">
+    {{-- Estilos para el calendario con CSS normal ya que son más complejos --}}
     @vite('resources/css/calendar/style.css')
 @endsection
 

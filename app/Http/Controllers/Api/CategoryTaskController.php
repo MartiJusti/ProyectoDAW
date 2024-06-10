@@ -28,18 +28,18 @@ class CategoryTaskController extends Controller
         $categoryId = $request->get('category_id');
 
         if (!$categoryId) {
-            return response()->json(['error' => 'Category ID is required'], 400);
+            return response()->json(['error' => 'Category ID es obligatorio'], 400);
         }
 
         $category = Category::find($categoryId);
 
         if (!$category) {
-            return response()->json(['error' => 'Category not found'], 404);
+            return response()->json(['error' => 'Categoría no encontrada'], 404);
         }
 
         $task->categories()->attach($categoryId);
 
-        return response()->json(['message' => 'Category assigned to task successfully'], 200);
+        return response()->json(['message' => 'Categoría asignada a tarea correctamente'], 200);
     }
 
 }

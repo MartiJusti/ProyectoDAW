@@ -67,6 +67,7 @@ function showConfirm(apiUrl, taskId, accessToken, userRole) {
     });
 }
 
+/* Este código sirve para pasar las funciones a la página que utiliza el script */
 window.initializeDeleteTask = async function (apiUrl, taskId, accessToken) {
     const userInfo = await getUserInfo(apiUrl, accessToken);
 

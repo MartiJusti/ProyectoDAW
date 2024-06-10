@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', async function () {
                             const userAvatar = document.createElement('img');
                             userAvatar.src = 'storage/img/avatar.png';
                             userAvatar.alt = 'Avatar Image';
-                            userAvatar.classList.add('h-6', 'w-6', 'md:h-8', 'md:w-8', 'rounded-full'); // Add Tailwind CSS classes for styling
+                            userAvatar.classList.add('h-6', 'w-6', 'md:h-8', 'md:w-8', 'rounded-full');
 
                             userLink.href = `/chat/${user.id}`;
                             userLink.prepend(userAvatar);

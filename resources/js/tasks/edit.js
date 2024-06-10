@@ -67,6 +67,7 @@ async function editTask(taskId, accessToken, userRole) {
     });
 }
 
+/* Este código sirve para pasar las funciones a la página que utiliza el script */
 window.initializeEditTask = async function (taskId, accessToken) {
     const userInfo = await getUserInfo(apiUrl, accessToken);
 

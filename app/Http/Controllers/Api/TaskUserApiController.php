@@ -29,18 +29,18 @@ class TaskUserApiController extends Controller
         $userId = $request->get('user_id');
 
         if (!$userId) {
-            return response()->json(['error' => 'User ID is required'], 400);
+            return response()->json(['error' => 'User ID es obligatorio'], 400);
         }
 
         $user = User::find($userId);
 
         if (!$user) {
-            return response()->json(['error' => 'User not found'], 404);
+            return response()->json(['error' => 'Usuario no encontrado'], 404);
         }
 
         $task->users()->attach($userId);
 
-        return response()->json(['message' => 'User assigned to task successfully'], 200);
+        return response()->json(['message' => 'Usuario asignado a la tarea correctamente'], 200);
     }
 
     public function removeUserFromTask($taskId, $userId)
@@ -49,7 +49,7 @@ class TaskUserApiController extends Controller
         $user = User::find($userId);
 
         if (!$task || !$user) {
-            return response()->json(['error' => 'Task or User not found'], 404);
+            return response()->json(['error' => 'Tarea o usuario no encontrado'], 404);
         }
 
         $task->users()->detach($userId);
@@ -59,7 +59,7 @@ class TaskUserApiController extends Controller
             $score->delete();
         }
 
-        return response()->json(['message' => 'User removed from task successfully'], 200);
+        return response()->json(['message' => 'Usuario eliminado de la tarea correctamente'], 200);
     }
 
     //Estas tareas son para el calendario, ya que para que las muestre las fechas han de tener esos nombres

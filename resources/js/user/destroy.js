@@ -58,6 +58,7 @@ function showConfirm(apiUrl, userId, accessToken) {
     });
 }
 
+/* Este código sirve para pasar las funciones a la página que utiliza el script */
 window.initializeDeleteUser = function (apiUrl, userId, accessToken) {
     const deleteButton = document.getElementById('delete-btn');
     deleteButton.addEventListener('click', function () {

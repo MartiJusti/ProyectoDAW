@@ -60,6 +60,7 @@ async function fetchTaskUsersAndScores(apiUrl, taskId, users, accessToken, userR
             const tableBody = document.createElement('tbody');
             const participantUsers = usersData.filter(user => user.rol === 'participant');
 
+            //Mapea usuarios participantes para combinar su información con las puntuaciones correspondientes
             const combinedData = participantUsers.map(user => {
                 const userScore = scoresData.find(score => score.user.id === user.id);
 
@@ -150,6 +151,7 @@ async function savePoints(apiUrl, accessToken, userId, taskId) {
     const inputElement = document.getElementById(`points-input-${userId}`);
     const newPoints = inputElement.value;
     const scoreExists = scoreState[userId].exists;
+    //Para que cambia la solicitud HTTP en función de si la puntuación del usuario existe o no
     const method = scoreExists ? 'PATCH' : 'POST';
 
     try {
@@ -170,6 +172,7 @@ async function savePoints(apiUrl, accessToken, userId, taskId) {
 
         const data = await response.json();
 
+        //Guarda la información de la puntuación del usuario, para comprobar si existe o no
         scoreState[userId] = {
             points: data.points,
             exists: true
@@ -301,6 +304,7 @@ async function deleteUserFromTask(apiUrl, userId, taskId, users, accessToken) {
     }
 }
 
+/* Este código sirve para pasar las funciones a la página que utiliza el script */
 window.initializeUserAndScoreFunctions = async function (apiUrl, taskId, users, accessToken) {
     const userInfo = await getUserInfo(apiUrl, accessToken);
 

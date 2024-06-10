@@ -29,6 +29,7 @@ Route::group([
     'middleware' => ['auth:sanctum']
 ], function () {
 
+    //Ruta para obtener la información del usuario autenticado
     Route::get('currentUser', function (Request $request) {
         return $request->user();
     });

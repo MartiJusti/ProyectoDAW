@@ -59,6 +59,8 @@ document.addEventListener('DOMContentLoaded', async function () {
             });
     }
 
+    /* Esta función permite buscar las tareas que tienen acentos
+    sin necesidad de escribirlos en el buscador */
     const normalizeString = (str) => {
         return str
             .normalize("NFD")

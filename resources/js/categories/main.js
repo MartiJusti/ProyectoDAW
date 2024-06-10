@@ -109,6 +109,7 @@ async function assignCategoryToTask(apiUrl, accessToken, taskId, categories, use
     }
 }
 
+/* Este código sirve para pasar las funciones a la página que utiliza el script */
 window.initializeCategoryFunctions = async function (apiUrl, taskId, categories, accessToken) {
     const userInfo = await getUserInfo(apiUrl, accessToken);
 

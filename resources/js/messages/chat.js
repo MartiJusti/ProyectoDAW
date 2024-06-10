@@ -88,6 +88,7 @@ function sendMessage(content, accessToken, senderId, receiverId, callback) {
         });
 }
 
+/* Este código sirve para pasar las funciones a la página que utiliza el script */
 window.initializeChat = async function (otherUser, accessToken) {
     const chatContainer = document.getElementById('chat-container');
     const messageForm = document.getElementById('message-form');

@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     };
 
+    //Muestra u oculta el sidebar y el overlay
     if (sidebarToggle) {
         sidebarToggle.addEventListener('click', toggleSidebar);
     }

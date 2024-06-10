@@ -1,3 +1,4 @@
+/* Muestra el toast, y ejecuta una función al cerrarse */
 export function showToastWithCallback(message, background, callback) {
     Toastify({
         text: message,
