@@ -25,7 +25,7 @@ class TaskRequest extends FormRequest
             'name' => 'required|string|min:3|max:255',
             'description' => 'required|string|min:3|max:1000',
             'date_start' => 'required|date|before_or_equal:date_end',
-            'date_end' => 'required|date|after_or_equal:date_start',
+            'date_end' => 'required|date|after_or_equal:date_start|after:today',
         ];
 
         if ($this->isMethod('patch') || $this->isMethod('put')) {
@@ -33,7 +33,7 @@ class TaskRequest extends FormRequest
                 'name' => 'sometimes|required|string|min:3|max:255',
                 'description' => 'sometimes|required|string|min:3|max:1000',
                 'date_start' => 'sometimes|required|date|before_or_equal:date_end',
-                'date_end' => 'sometimes|required|date|after_or_equal:date_start',
+                'date_end' => 'sometimes|required|date|after_or_equal:date_start|after:today',
             ];
         }
 
@@ -61,6 +61,7 @@ class TaskRequest extends FormRequest
             'date_end.required' => 'La fecha de fin es obligatoria.',
             'date_end.date' => 'La fecha de fin debe ser una fecha válida.',
             'date_end.after_or_equal' => 'La fecha de fin no puede ser anterior a la fecha de inicio.',
+            'date_end.after' => 'La fecha de fin debe ser posterior a hoy.',
         ];
     }
 }
